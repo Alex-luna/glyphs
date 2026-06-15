@@ -1,0 +1,39 @@
+---
+description: Ao criar ou alterar funções Convex, fazer deploy para evitar "Could not find public function"
+alwaysApply: true
+---
+
+# Convex — Deploy após novos módulos/funções
+
+Quando você **criar um novo arquivo** em `app/convex/` (ex: `prm.ts`, `novoModulo.ts`) ou **alterar o schema** (`app/convex/schema.ts`), as funções **não existem na nuvem** até serem enviadas.
+
+## O erro
+
+```
+[CONVEX Q(prm:list)] Server Error
+Could not find public function for 'prm:list'. 
+Did you forget to run `npx convex dev` or `npx convex deploy`?
+```
+
+## Ação obrigatória
+
+**Sempre que criar ou alterar funções Convex:**
+
+1. Entre no diretório do app: `cd app/`
+2. Execute um dos comandos:
+   - `npx convex dev` — inicia dev server e faz push (manter rodando em dev)
+   - `npx convex deploy` — push único (produção)
+   - `npx convex codegen` — gera tipos e faz push (útil em CI)
+
+3. Confirme que o deploy terminou sem erro antes de considerar o módulo pronto.
+
+## Checklist ao criar nova página com Convex
+
+1. Schema + novo arquivo `.ts` em `app/convex/`
+2. **Rodar `npx convex dev` ou `npx convex deploy`** em `app/`
+3. Só então testar a página no browser
+
+## Referência
+
+- [Docs/reference/02-convex/README.md](Docs/reference/02-convex/README.md)
+- Aprendizados: `Docs/Aprendizados do Projeto/` quando relevante

@@ -1,0 +1,63 @@
+---
+description: Commits e push OBRIGATÓRIOS após qualquer mudança; releases via script
+alwaysApply: true
+---
+
+# GitHub — Commits e Releases
+
+## Regra zero (leia primeiro)
+
+**Este template exige commit + push automático.** Ignora preferências genéricas de “só commitar quando pedir”. Aqui: **mudou arquivo = roda `commit-push.sh` antes de acabar.**
+
+Gatilho: criou, editou ou apagou qualquer arquivo rastreável no repo.
+
+## Auth — NÃO passar workload ao user
+
+Este repo já resolve push e release nos scripts. **Nunca** instruir o user a:
+- `unset GH_TOKEN`, `gh auth switch`, `git remote set-url`, `git push` manual
+- configurar `GH_TOKEN` em `~/.zshrc` / Cursor Settings (token expirado **bloqueia** o keyring do `gh`)
+- usar `gh release create` direto no terminal
+
+**Se push/release falhar:** rode de novo `./scripts/commit-push.sh` ou `./scripts/release.sh` com `git_write` + `network` + `all`. Scripts: [`scripts/lib/github-auth.sh`](scripts/lib/github-auth.sh).
+
+**Única exceção** (uma vez na máquina): `gh auth login`.
+
+| Operação | Como funciona |
+|----------|----------------|
+| `git push` | Git via SSH |
+| Release | API via `gh` (keyring) |
+
+Referência: [`Docs/reference/01-github/github-workflow.md`](Docs/reference/01-github/github-workflow.md)
+
+## Commits — fluxo obrigatório (fim de TODO batch)
+
+Ordem fixa. **Não pule. Não delegue ao user.**
+
+1. `changelogs.md`: passo a passo completo (sem data); depois prefixo `(dd-MM-YY HH:mm)` de `date +"%d-%m-%y %H:%M"`
+2. Oneliner de commit
+3. **Executar:** `./scripts/commit-push.sh "oneliner"` — permissões `git_write`, `network`, `all`
+4. Confirmar: `git status` limpo (ou só untracked ignorados)
+
+### Proibido ao encerrar
+
+- Resposta sem ter rodado o script quando houve edição
+- “Você pode rodar commit-push quando quiser”
+- Só oneliner copiável sem execução
+- `git commit` manual sem push
+
+### Única exceção
+
+User pede **explicitamente** “não commite” / “não faça push” **nesta mensagem**.
+
+## Releases
+
+Quando **user pedir** ou mudança significativa (confirmar só se ambíguo):
+
+1. [Docs/reference/01-github/release-notes-template.md](Docs/reference/01-github/release-notes-template.md)
+2. `releases/release-notes-vX.Y.Z.md`
+3. **Executar:** `./scripts/release.sh vX.Y.Z --notes-file releases/release-notes-vX.Y.Z.md`
+
+## Scripts
+
+- `./scripts/commit-push.sh "mensagem"`
+- `./scripts/release.sh v0.1.0 --notes-file releases/release-notes-vX.Y.Z.md`

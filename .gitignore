@@ -1,0 +1,14 @@
+# dependencies
+node_modules/
+
+# misc
+.DS_Store
+*.log
+.env*
+
+# sqlite (preset easypanel)
+data/*.sqlite
+data/*.db
+
+# cursor session plans (não versionar no template)
+.cursor/plans/

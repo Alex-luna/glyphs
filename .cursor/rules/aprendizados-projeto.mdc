@@ -1,0 +1,43 @@
+---
+description: Documentar aprendizados do projeto (sucessos e fracassos) em Docs/Aprendizados do Projeto/
+alwaysApply: true
+---
+
+# Aprendizados do Projeto
+
+Sempre que houver um aprendizado relevante — seja algo que deu errado e foi corrigido, seja algo que deu certo e vale replicar — documente em `Docs/Aprendizados do Projeto/`.
+
+## Quando documentar
+
+- **Quando algo dá errado:** problema gerado, causa, solução aplicada.
+- **Quando algo dá certo:** o que funcionou bem e por que vale repetir.
+- **Quando há mudança de processo:** nova regra, convenção ou skill que passa a ser usada.
+
+## Formato do arquivo
+
+Crie um arquivo `.md` em `Docs/Aprendizados do Projeto/` com nome descritivo (ex: `aprendizado-convex-deploy.md`).
+
+Estrutura sugerida:
+
+```markdown
+# Aprendizado — [título breve]
+
+## Ocorrido
+O que aconteceu (contexto, decisão, ação).
+
+## Problema gerado (se aplicável)
+Efeito negativo ou resultado indesejado.
+
+## O que funcionou (se aplicável)
+Por que deu certo e o que vale repetir.
+
+## Solução / Lição
+Como corrigimos ou o que extraímos para o futuro.
+
+## Data
+dd-MM-aa
+```
+
+## Skills e decisões técnicas
+
+Antes de construir UI/UX, verifique se há skills de design instaladas (`./scripts/install-optional-skills.sh` — ver README). Se o prompt citar apenas uma skill mas outras forem relevantes, pergunte ao usuário se deve usá-las também.

@@ -1,0 +1,46 @@
+---
+description: Ao modificar um módulo do Framework Blueprint, atualize versão, histórico e docs
+alwaysApply: false
+---
+
+# Versionamento de Módulos (Framework Blueprint)
+
+Copie para `.cursor/rules/module-versioning.mdc` e defina `alwaysApply: true` se o projeto usar Framework Blueprint.
+
+Quando você alterar código de um módulo do Framework Blueprint, deve:
+
+1. **Incrementar `version`** em `app/src/lib/frameworkBlueprintConfig.ts`
+   - Patch (1.0.0 → 1.0.1): fixes, ajustes de UI
+   - Minor (1.0.0 → 1.1.0): novas features
+   - Major (1.0.0 → 2.0.0): reescrita ou mudança incompatível
+
+2. **Adicionar entrada em `versionHistory`** do módulo:
+   ```ts
+   { version: "1.0.1", date: "dd-MM-yy", notes: "Descrição breve" }
+   ```
+   Use `date +"%d-%m-%y"` para obter a data atual.
+
+3. **Atualizar** `Docs/Module Versions/README.md` — tabela de versões atuais
+
+## IDs dos módulos
+
+| id | Módulo |
+|----|--------|
+| dashboard | Dashboard |
+| doc | Identidade do Expert |
+| core-identity | Core Identity |
+| beliefs | Beliefs Repository |
+| storylines | Storylines |
+| content-engine | Content Engine |
+| traffic-flow | Traffic Flow |
+| cash-scoreboard | Cash Scoreboard |
+| offers | Offers |
+| market-pressure | Market Pressure |
+| os | OS (tabelas) |
+| system-logs | System Logs |
+| expert-status | Expert Status |
+| axios | AXIOS |
+| perfect-week | Perfect Week |
+| prj-task | PRJ Task Management |
+| strategic-decision | Strategic Decision Log |
+| prm | PRM |

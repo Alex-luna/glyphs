@@ -1,0 +1,32 @@
+---
+description: Comportamento padrão do agent neste template
+alwaysApply: true
+---
+
+# Comportamento padrão
+
+## Princípio
+
+**Simples sempre vence.** Duas opções resolvem → a mais simples ganha até prova contrária.
+Menos arquivos, rules, deps, docs paralelos.
+
+| Contexto | Onde |
+|----------|------|
+| Código / features | `ponytail.mdc` |
+| Repo / infra Cursor | skill `repo-audit` |
+| Comunicação | `caveman.mdc` |
+| Fork | [`Docs/FORK.md`](Docs/FORK.md) |
+
+## Git — não negociável
+
+**Alterou arquivo no repo → antes de encerrar a resposta, execute `./scripts/commit-push.sh`.** Sem exceção neste template.
+
+- Não termine turno com mudanças só no working tree
+- Não entregue só oneliner — **rode o script**
+- Não peça ao user para commitar/pushar manualmente
+- Falhou push → corrija e rode de novo (`git_write` + `network` + `all`)
+- Detalhes: `github-workflow.mdc`
+
+## Apps
+
+- Em apps que criar/alterar: `console.log` em ações do usuário (botões, submit, navegação)

@@ -1,0 +1,42 @@
+---
+description: Stack padrão Alex — só quando o repo tiver app/ Next
+alwaysApply: true
+---
+
+# Stack padrão (condicional)
+
+Comportamento geral: `default.mdc`.
+
+**Se não existir pasta `app/` neste repo:** ignore quase tudo abaixo. Use só notas em `Design-System/` se fizer sentido.
+
+**Se existir `app/`:** o agent assume este layout.
+
+## Stack
+
+- **Next.js** (App Router)
+- **Tailwind CSS** + **shadcn/ui**
+- **Convex** (opcional — sem `NEXT_PUBLIC_CONVEX_URL` o app roda)
+- Design terminal/brutalist — tokens em `Design-System/`, import em `app/src/app/globals.css` quando existir
+
+## Estrutura (quando existir)
+
+- `app/` — `cd app && npm run dev`
+- `Design-System/` — tokens e referência visual
+- `/styleguide` — paleta, tipografia, componentes
+
+## Convex (quando existir `app/convex/`)
+
+- Ativar: `cd app && npx convex dev`
+- Após alterar schema ou funções: rule **convex-module-deploy** (deploy antes de testar)
+
+## Deploy Easypanel (opcional)
+
+Caminho padrão Next continua **Vercel**. Easypanel é alternativa na VPS:
+
+- Build Path: `/app`
+- Nixpacks — Install / Build / Start vazios (detecta `package.json` em `app/`)
+- Environment: `NEXT_PUBLIC_*` e demais vars do app no painel
+- `app/package-lock.json` commitado
+- Volume `/app/data` só se houver SQLite na raiz do repo (caso híbrido raro)
+
+Checklist: `Docs/reference/03-easypanel/easypanel-panel.md`

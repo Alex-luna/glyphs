@@ -1,0 +1,7 @@
+Openrouter_api_key=
+openrouter_base_model=google/gemma-4-31b-it
+
+## Google Sheets Info
+google_sheets_api_key=
+google_sheets_sheet_url=
+google_sheets_sheet_tab=

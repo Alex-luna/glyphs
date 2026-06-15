@@ -1,0 +1,43 @@
+---
+description: Preset Easypanel — public + Express + SQLite (quando server.js na raiz)
+alwaysApply: true
+---
+
+# Easypanel simples (condicional)
+
+Comportamento geral: `default.mdc`.
+
+**Se não existir `server.js` na raiz deste repo:** ignore tudo abaixo.
+
+**Se existir `server.js` na raiz:** agent assume preset Easypanel simples.
+
+## Stack
+
+- `public/` — HTML/CSS/JS estático
+- `server.js` — Express + SQLite em `data/database.sqlite`
+- `package.json` + `package-lock.json` — Nixpacks/`npm ci` exige lockfile commitado
+- `npm start` → Nixpacks no Easypanel
+
+## Dev local
+
+- `./scripts/dev-simple.sh`
+- Porta: `process.env.PORT` ou 3000; se ocupada, tenta +1 até +50 (fallback no `server.js`)
+- Produção: Easypanel injeta `PORT` — sem fallback necessário na prática
+
+## UI / PWA
+
+- `public/manifest.json` com `"display": "standalone"`; meta Apple no HTML
+- Nunca `alert()`, `confirm()` ou `prompt()` — quebram PWA standalone; usar modals custom
+
+## Deploy Easypanel
+
+1. Push GitHub (`commit-push.sh`) — incluir `package-lock.json`
+2. App Easypanel → repo → Build Path `/` → Nixpacks (install/build/start vazios OK)
+3. **Volume obrigatório:** Storage → mount `/app/data`
+4. SQLite só em `data/` — nunca commitar `*.sqlite`
+
+## Docs
+
+- Índice: `Docs/reference/03-easypanel/README.md`
+- Node: `Docs/reference/03-easypanel/simple-node.md`
+- Painel: `Docs/reference/03-easypanel/easypanel-panel.md`

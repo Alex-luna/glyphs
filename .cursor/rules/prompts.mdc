@@ -1,0 +1,29 @@
+---
+description: Docs/Prompts — organização mínima; nunca editar corpo do prompt
+alwaysApply: true
+---
+
+# Prompts (condicional)
+
+Comportamento geral: `default.mdc`.
+
+**Se não existir `Docs/Prompts/` neste repo:** ignore tudo abaixo.
+
+## Regras para o agent
+
+- **Nunca editar o corpo** de um prompt já salvo (texto após o frontmatter)
+- **Nunca** reescrever título ou conteúdo para “melhorar”, resumir ou padronizar
+- **Nunca** renumerar arquivos manualmente (`01_`, `02_`) — `normalize-prompts.sh` faz isso no commit
+- Pode criar arquivo **novo** em `Docs/Prompts/` ou `inbox/` com o texto que o user forneceu
+- Pode sugerir frontmatter; não forçar campos além do mínimo
+- Se user pedir só organização: frontmatter ausente OK; corpo intocado
+
+## Convenções
+
+- `01_` = prompt mais **antigo**; número maior = mais recente
+- Frontmatter mínimo (se ausente): `type`, `title`, `created`
+- Normalização light no `commit-push` — não reescreve arquivos que já têm `---`
+
+## Docs
+
+- `Docs/Prompts/README.md`
