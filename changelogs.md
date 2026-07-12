@@ -1,5 +1,9 @@
 # Changelogs
 
+(12-07-26 17:17) Storytelling geométrico radial
+- Triângulo aponta outflow (`apontar` ou 1ª conexão `de`); layer `gr-story` (chevrons, framing, ticks)
+- Skill story grammar; demo com formas explícitas; aprendizado forma≠decoração
+
 (12-07-26 16:50) Release v0.4.0 — blueprint + formas + modo venn/Ikigai
 
 (12-07-26 16:45) Blueprint + venn + alinhamento

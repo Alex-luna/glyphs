@@ -250,6 +250,29 @@ body {
   stroke-dasharray: 1.5 5;
 }
 
+.gr-story-chevron {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+  opacity: 0.7;
+}
+
+.gr-story-frame {
+  fill: none;
+  stroke: var(--ink-ghost);
+  stroke-width: 0.9;
+  stroke-dasharray: 4 3;
+  opacity: 0.55;
+}
+
+.gr-story-tick {
+  stroke: var(--ink-ghost);
+  stroke-width: 1;
+  opacity: 0.5;
+}
+
 .gr-node-ring {
   fill: var(--bg);
   stroke: var(--ink);

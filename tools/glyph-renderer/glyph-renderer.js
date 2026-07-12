@@ -323,6 +323,7 @@
   const $sintese = document.getElementById("glyph-sintese");
   const $sinteseCol = document.getElementById("glyph-sintese-col");
   const $blueprint = document.getElementById("gr-blueprint");
+  const $story = document.getElementById("gr-story");
   const $zones = document.getElementById("gr-zones");
   const $mesh = document.getElementById("gr-edges-mesh");
   const $edges = document.getElementById("gr-edges");
@@ -385,6 +386,31 @@
     if (/estrutura|marco|geometria/.test(cat)) return "square";
     if (/relacao|tens|dinam/.test(cat)) return "triangle";
     return "circle";
+  }
+
+  function isTensionNode(nd) {
+    if (nd.forma === "triangle") return true;
+    return /relacao|tens|dinam/.test(String(nd.categoria || "").toLowerCase());
+  }
+
+  /** Apex-up triangle → rotate so apex faces target. SVG y-down. */
+  function resolveApontarTarget(nd) {
+    if (nd.apontar) {
+      const t = nodes.find((n) => n.id === nd.apontar);
+      if (t) return t;
+    }
+    const out = edges.find((e) => e.a.id === nd.id);
+    if (out) return out.b;
+    // only inbound: force away from core along spoke
+    const a = nd.angle != null ? nd.angle : Math.atan2(nd.y - cy, nd.x - cx);
+    return { x: cx + Math.cos(a) * (R + 40), y: cy + Math.sin(a) * (R + 40) };
+  }
+
+  function triangleRotateDeg(nd) {
+    const t = resolveApontarTarget(nd);
+    const target = Math.atan2(t.y - nd.y, t.x - nd.x);
+    const apexUp = -Math.PI / 2;
+    return ((target - apexUp) * 180) / Math.PI;
   }
 
   function quadPoint(t) {
@@ -598,6 +624,7 @@
           papel: "core",
           forma: resolveForma(coreSpec),
           categoria: coreSpec.categoria || "",
+          apontar: coreSpec.apontar || null,
         },
       ];
       idToIdx.set(coreSpec.id, 0);
@@ -616,6 +643,7 @@
           papel: "orbit",
           forma: resolveForma(spec),
           categoria: spec.categoria || "",
+          apontar: spec.apontar || null,
         });
       });
     }
@@ -808,7 +836,14 @@
         " " +
         (nd.y + h * 0.7) +
         " Z";
-      $nodes.appendChild(mk("path", { d: d, class: "gr-node-shape" }));
+      const rot = mode === "radial" ? triangleRotateDeg(nd) : 0;
+      $nodes.appendChild(
+        mk("path", {
+          d: d,
+          class: "gr-node-shape",
+          transform: "rotate(" + rot + " " + nd.x + " " + nd.y + ")",
+        })
+      );
     } else {
       $nodes.appendChild(
         mk("circle", {
@@ -946,9 +981,132 @@
     placeEdgeLabelAt(mx0 + (toCtrlX / cl) * 16, my0 + (toCtrlY / cl) * 16, e);
   }
 
+  function hasClosedRingCycle() {
+    const orbits = nodes.filter((n) => n.papel === "orbit");
+    if (orbits.length < 3) return false;
+    const sorted = orbits.slice().sort((a, b) => a.angle - b.angle);
+    const ringKeys = new Set();
+    for (const e of edges) {
+      if (e.kind !== "ring") continue;
+      ringKeys.add([e.a.id, e.b.id].sort().join("|"));
+    }
+    for (let i = 0; i < sorted.length; i++) {
+      const a = sorted[i];
+      const b = sorted[(i + 1) % sorted.length];
+      if (!ringKeys.has([a.id, b.id].sort().join("|"))) return false;
+    }
+    return true;
+  }
+
+  function drawRingChevron(e) {
+    const d = shortArcDelta(e.a.angle, e.b.angle);
+    const mid = e.a.angle + d / 2;
+    const mx = cx + R * Math.cos(mid);
+    const my = cy + R * Math.sin(mid);
+    // tangent in travel direction (increasing angle → (-sin, cos) in SVG coords)
+    const sign = d >= 0 ? 1 : -1;
+    const tx = -Math.sin(mid) * sign;
+    const ty = Math.cos(mid) * sign;
+    const nx = Math.cos(mid);
+    const ny = Math.sin(mid);
+    const len = 5;
+    const wing = 3.5;
+    const tipX = mx + tx * len;
+    const tipY = my + ty * len;
+    const b1x = mx - tx * 1.5 + nx * wing;
+    const b1y = my - ty * 1.5 + ny * wing;
+    const b2x = mx - tx * 1.5 - nx * wing;
+    const b2y = my - ty * 1.5 - ny * wing;
+    $story.appendChild(
+      mk("path", {
+        d:
+          "M " +
+          b1x +
+          " " +
+          b1y +
+          " L " +
+          tipX +
+          " " +
+          tipY +
+          " L " +
+          b2x +
+          " " +
+          b2y,
+        class: "gr-story-chevron",
+      })
+    );
+  }
+
+  function drawRadialStoryMarks() {
+    if (!$story) return;
+    clear($story);
+
+    for (const e of edges) {
+      if (e.kind === "ring") drawRingChevron(e);
+    }
+
+    const tension = nodes.filter(
+      (n) => n.papel === "orbit" && isTensionNode(n)
+    );
+    if (tension.length >= 3) {
+      // prefer nodes with outbound ring/spoke; keep angular spread
+      const ranked = tension.slice().sort((a, b) => {
+        const outA = edges.filter((e) => e.a.id === a.id).length;
+        const outB = edges.filter((e) => e.a.id === b.id).length;
+        if (outB !== outA) return outB - outA;
+        return a.angle - b.angle;
+      });
+      const pick = ranked.slice(0, 3).sort((a, b) => a.angle - b.angle);
+      const inset = 0.72;
+      const pts = pick.map((n) => ({
+        x: cx + (n.x - cx) * inset,
+        y: cy + (n.y - cy) * inset,
+      }));
+      $story.appendChild(
+        mk("path", {
+          d:
+            "M " +
+            pts[0].x +
+            " " +
+            pts[0].y +
+            " L " +
+            pts[1].x +
+            " " +
+            pts[1].y +
+            " L " +
+            pts[2].x +
+            " " +
+            pts[2].y +
+            " Z",
+          class: "gr-story-frame",
+        })
+      );
+    }
+
+    if (hasClosedRingCycle()) {
+      const rTick = R * 0.45;
+      const tick = 5;
+      const cards = [-Math.PI / 2, 0, Math.PI / 2, Math.PI];
+      for (const a of cards) {
+        const ux = Math.cos(a);
+        const uy = Math.sin(a);
+        $story.appendChild(
+          mk("line", {
+            x1: cx + ux * (rTick - tick),
+            y1: cy + uy * (rTick - tick),
+            x2: cx + ux * (rTick + tick),
+            y2: cy + uy * (rTick + tick),
+            class: "gr-story-tick",
+          })
+        );
+      }
+    }
+  }
+
   function drawRadial() {
     clear($zones);
     clear($mesh);
+    if ($story) clear($story);
 
     $zones.appendChild(
       mk("circle", { cx: cx, cy: cy, r: R, class: "gr-guide-ring" })
@@ -961,6 +1119,8 @@
         class: "gr-guide-ring inner",
       })
     );
+
+    drawRadialStoryMarks();
 
     for (const e of edges) {
       const cls = strokeClass(e.relacionamento, e.animKey);
@@ -1186,6 +1346,7 @@
     clear($nodes);
     clear($labels);
     clear($packets);
+    if ($story) clear($story);
     packets = [];
     edgeLabelPts = [];
 

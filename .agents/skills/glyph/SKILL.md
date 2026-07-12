@@ -44,9 +44,34 @@ into a glyph that **explains**.
 ## Mode `radial`
 
 Star + ring neighbors. One `papel: "core"`. Orbits `papel: "orbit"`.
-Optional `forma`: `circle` | `square` | `triangle` (or infer from `categoria`).
 Max 5 spokes; orbit–orbit only between ring neighbors.
 Edge `label` required (verb ≤12 chars). Node labels ≤14 chars. 4–8 nodes.
+
+### Story grammar (radial)
+
+Forma = papel na narrativa. **Nunca** silhueta aleatória.
+
+| Forma | Significado | Orientação |
+|-------|-------------|------------|
+| `circle` | estado / presença estável | n/a (core quase sempre circle) |
+| `square` | estrutura / contêiner | eixo alinhado |
+| `triangle` | força / direção / tensão | ápice aponta outflow |
+
+Outflow do triângulo (render deriva; skill controla):
+
+1. `apontar: "<id>"` — override explícito
+2. Senão: primeira conexão `de: esteNó` (ordem no JSON = prioridade)
+3. Senão (só inbound): aponta para longe do core no spoke
+
+Geometria interna (`gr-story`) nasce do grafo — não inventar eixos órfãos:
+
+- chevrons no anel no sentido `de→para`
+- triângulo de enquadramento se ≥3 órbitas de tensão (`forma: triangle` ou categoria `relacao|tens|dinam`)
+- ticks N/E/S/W só se o anel fecha (ciclo vizinho a vizinho)
+
+```json
+{ "id": "fluxos", "label": "fluxos", "papel": "orbit", "forma": "triangle", "apontar": "ritmo", "categoria": "relacao" }
+```
 
 ## Mode `arc`
 
