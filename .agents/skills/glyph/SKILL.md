@@ -30,6 +30,7 @@ spec.
 - **Radial topology** — components on the circumference, not a hierarchy list.
 - **Constrained canvas** — `n` nodes → equal angle slices (`2π/n`).
 - **Data-ink** — few nodes, clear edges; no decorative junk in the JSON.
+- **Short labels** — renderer clips long text; keep labels iii-style.
 
 ## Output schema
 
@@ -40,12 +41,12 @@ spec.
     "estilo_visual": "dark_minimalist_cyberpunk"
   },
   "nos": [
-    { "id": "id_curto_1", "label": "Component name", "categoria": "concept_type" }
+    { "id": "atencao", "label": "atenção", "categoria": "recurso" }
   ],
   "conexoes": [
     {
-      "de": "id_curto_1",
-      "para": "id_curto_2",
+      "de": "atencao",
+      "para": "energia",
       "relacionamento": "alimenta",
       "animacao": "pulso_rapido"
     }
@@ -57,7 +58,8 @@ Rules:
 
 - `nos.length` must be 4–8.
 - Every `conexoes.de` / `conexoes.para` must match a `nos.id`.
-- Prefer lowercase short `id`s (`snake` or single token).
+- `label`: lowercase, 1–2 words, **max 14 characters** (ex: `atenção`, `energia`, `prioridade` — not `orquestração de atenção`).
+- `id`: short token matching or abbreviating the label (`snake` or single word).
 - `estilo_visual` stays `dark_minimalist_cyberpunk` unless user asks otherwise.
 
 ## Renderer

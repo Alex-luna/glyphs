@@ -71,7 +71,8 @@
   const VB = 400;
   const cx = VB / 2;
   const cy = VB / 2;
-  const R = 144;
+  const R = 110;
+  const LABEL_MAX = 14;
   const SVG_NS = "http://www.w3.org/2000/svg";
 
   const $json = document.getElementById("glyph-json");
@@ -114,10 +115,22 @@
     $err.textContent = msg || "";
   }
 
+  function stripFence(raw) {
+    const t = raw.trim();
+    const m = t.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/i);
+    return m ? m[1].trim() : t;
+  }
+
+  function truncateLabel(s) {
+    const full = String(s).toLowerCase();
+    if (full.length <= LABEL_MAX) return { display: full, full };
+    return { display: full.slice(0, LABEL_MAX - 1) + "…", full };
+  }
+
   function parseGlyph(raw) {
     let data;
     try {
-      data = JSON.parse(raw);
+      data = JSON.parse(stripFence(raw));
     } catch (e) {
       throw new Error("JSON inválido: " + e.message);
     }
@@ -141,11 +154,13 @@
     nodes = data.nos.map((spec, i) => {
       const a = (i / n) * Math.PI * 2 - Math.PI / 2;
       idToIdx.set(spec.id, i);
+      const lab = truncateLabel(spec.label);
       return {
         x: cx + R * Math.cos(a),
         y: cy + R * Math.sin(a),
         angle: a,
-        label: String(spec.label).toLowerCase(),
+        label: lab.display,
+        labelFull: lab.full,
         id: spec.id,
       };
     });
@@ -213,7 +228,7 @@
     }
 
     for (const nd of nodes) {
-      const lr = R + 22;
+      const lr = R + 16;
       const lx = cx + lr * Math.cos(nd.angle);
       const ly = cy + lr * Math.sin(nd.angle);
       const t = mk("text", {
@@ -229,6 +244,11 @@
         "dominant-baseline": "middle",
       });
       t.textContent = nd.label;
+      if (nd.labelFull && nd.labelFull !== nd.label) {
+        const title = mk("title");
+        title.textContent = nd.labelFull;
+        t.appendChild(title);
+      }
       $labels.appendChild(t);
     }
   }
