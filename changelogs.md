@@ -1,5 +1,7 @@
 # Changelogs
 
+(12-07-26 17:18) Release v0.5.0 — storytelling geométrico radial (triângulo+gr-story)
+
 (12-07-26 17:17) Storytelling geométrico radial
 - Triângulo aponta outflow (`apontar` ou 1ª conexão `de`); layer `gr-story` (chevrons, framing, ticks)
 - Skill story grammar; demo com formas explícitas; aprendizado forma≠decoração
