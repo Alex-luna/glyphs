@@ -237,6 +237,19 @@ body {
   aspect-ratio: 1 / 1;
 }
 
+.gr-guide-ring {
+  fill: none;
+  stroke: var(--ink-ghost);
+  stroke-width: 0.7;
+  stroke-dasharray: 2 4;
+  opacity: 0.45;
+}
+
+.gr-guide-ring.inner {
+  opacity: 0.28;
+  stroke-dasharray: 1.5 5;
+}
+
 .gr-node-ring {
   fill: var(--bg);
   stroke: var(--ink);
@@ -249,9 +262,28 @@ body {
 
 .gr-node-ring.outer {
   fill: none;
-  stroke: var(--ink-ghost);
-  stroke-width: 0.75;
-  opacity: 0.7;
+  stroke: var(--accent);
+  stroke-width: 0.9;
+  opacity: 0.55;
+}
+
+.gr-node-ring.outer.pulse {
+  animation: gr-core-pulse 2.4s ease-out infinite;
+}
+
+@keyframes gr-core-pulse {
+  0% {
+    opacity: 0.55;
+    stroke-width: 0.9;
+  }
+  70% {
+    opacity: 0;
+    stroke-width: 1.6;
+  }
+  100% {
+    opacity: 0;
+    stroke-width: 1.6;
+  }
 }
 
 .gr-node-dot {
@@ -260,33 +292,63 @@ body {
 
 .gr-node-label {
   font-family: var(--font);
-  font-size: 9px;
+  font-size: 10px;
   fill: var(--ink-faint);
   text-transform: lowercase;
   letter-spacing: 0.04em;
 }
 
+.gr-node-label.core {
+  font-size: 12px;
+  fill: var(--ink);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
 .gr-edge-halo {
   fill: var(--bg);
-  opacity: 0.88;
+  opacity: 0.9;
   stroke: none;
   pointer-events: none;
 }
 
 .gr-edge-label {
   font-family: var(--font);
-  font-size: 8px;
+  font-size: 7.5px;
   fill: var(--ink);
   text-transform: lowercase;
   letter-spacing: 0.03em;
-  opacity: 0.92;
+  opacity: 0.9;
 }
 
 .gr-edge {
   stroke: var(--ink);
-  stroke-width: 1;
+  stroke-width: 1.25;
   fill: none;
-  opacity: 0.9;
+  opacity: 0.92;
+}
+
+.gr-edge.solid {
+  stroke-dasharray: none;
+}
+
+.gr-edge.dash {
+  stroke-dasharray: 5 3.5;
+  stroke-width: 1.15;
+}
+
+.gr-edge.dot {
+  stroke-dasharray: 1.2 3.2;
+  stroke-width: 1;
+  opacity: 0.8;
+}
+
+.gr-edge.thick {
+  stroke-width: 1.55;
+}
+
+.gr-edge.ring {
+  opacity: 0.75;
 }
 
 .gr-edge.faint {

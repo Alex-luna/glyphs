@@ -7,7 +7,7 @@
     metadados: {
       modo: "radial",
       titulo: "Glifo Sistêmico",
-      subtitulo: "Ideia → geometria com núcleo e fluxos nomeados",
+      subtitulo: "Circuito: núcleo + spokes + anel de vizinhos",
       tese_central:
         "Toda ideia complexa pode ser mapeada como sistema fechado radial.",
       estilo_visual: "dark_minimalist_cyberpunk",
@@ -15,7 +15,7 @@
         diagnostico:
           "Listas e pirâmides escondem interações; o leitor vê partes, não o sistema.",
         pratica:
-          "Coloque a tese no centro. Nomeie cada fluxo. Corte arestas sem significado.",
+          "Coloque a tese no centro. Spokes nomeados. Anel só entre vizinhos.",
       },
     },
     zonas: [],
@@ -36,39 +36,67 @@
         animacao: "pulso_rapido",
       },
       {
-        de: "nos",
+        de: "tese",
         para: "fluxos",
         relacionamento: "alimenta",
         label: "alimenta",
         animacao: "pulso_rapido",
       },
       {
-        de: "fluxos",
+        de: "tese",
         para: "ritmo",
         relacionamento: "define",
         label: "define",
         animacao: "fluxo_lento",
       },
       {
+        de: "tese",
+        para: "canvas",
+        relacionamento: "contém",
+        label: "contém",
+        animacao: "fluxo_lento",
+      },
+      {
+        de: "tese",
+        para: "ink",
+        relacionamento: "restringe",
+        label: "corta",
+        animacao: "fluxo_lento",
+      },
+      {
+        de: "nos",
+        para: "fluxos",
+        relacionamento: "alimenta",
+        label: "liga",
+        animacao: "fluxo_lento",
+      },
+      {
+        de: "fluxos",
+        para: "ritmo",
+        relacionamento: "equilibra",
+        label: "equilibra",
+        animacao: "fluxo_lento",
+      },
+      {
+        de: "ritmo",
+        para: "canvas",
+        relacionamento: "equilibra",
+        label: "equilibra",
+        animacao: "fluxo_lento",
+      },
+      {
         de: "canvas",
-        para: "nos",
+        para: "ink",
         relacionamento: "contém",
         label: "contém",
         animacao: "fluxo_lento",
       },
       {
         de: "ink",
-        para: "fluxos",
+        para: "nos",
         relacionamento: "restringe",
         label: "corta",
         animacao: "fluxo_lento",
-      },
-      {
-        de: "ritmo",
-        para: "tese",
-        relacionamento: "vivifica",
-        label: "vivifica",
-        animacao: "pulso_rapido",
       },
     ],
   };
@@ -412,11 +440,18 @@
       }
       const rawLabel = c.label || c.relacionamento || "";
       const elab = truncate(rawLabel, EDGE_LABEL_MAX);
+      const a = nodes[fi];
+      const b = nodes[ti];
+      const spoke =
+        mode === "radial" &&
+        (a.papel === "core" || b.papel === "core");
       edges.push({
         fromIdx: fi,
         toIdx: ti,
-        a: nodes[fi],
-        b: nodes[ti],
+        a,
+        b,
+        kind: spoke ? "spoke" : mode === "radial" ? "ring" : "edge",
+        relacionamento: c.relacionamento || "",
         animKey: animKey(c.animacao),
         label: elab.display,
         labelFull: elab.full,
@@ -424,10 +459,81 @@
     }
   }
 
+  function strokeClass(rel, anim) {
+    const r = String(rel || "").toLowerCase();
+    let kind = "solid";
+    if (/op[oõ]e|corr[oó]i|quebra|restringe|corta|doma/.test(r)) kind = "dash";
+    else if (/equilibra|cont[eé]m/.test(r)) kind = "dot";
+    const thick = anim === "fluxo_lento" ? " thick" : "";
+    return "gr-edge " + kind + thick;
+  }
+
+  function shortArcDelta(a0, a1) {
+    let d = a1 - a0;
+    while (d <= -Math.PI) d += Math.PI * 2;
+    while (d > Math.PI) d -= Math.PI * 2;
+    return d;
+  }
+
+  function ringArcSpec(a, b) {
+    const d = shortArcDelta(a.angle, b.angle);
+    const large = 0;
+    const sweep = d >= 0 ? 1 : 0;
+    const path =
+      "M " +
+      a.x +
+      " " +
+      a.y +
+      " A " +
+      R +
+      " " +
+      R +
+      " 0 " +
+      large +
+      " " +
+      sweep +
+      " " +
+      b.x +
+      " " +
+      b.y;
+    const mid = a.angle + d / 2;
+    return {
+      path,
+      midX: cx + R * Math.cos(mid),
+      midY: cy + R * Math.sin(mid),
+      outX: Math.cos(mid),
+      outY: Math.sin(mid),
+    };
+  }
+
+  function insetSpoke(from, to, insetFrom, insetTo) {
+    const dx = to.x - from.x;
+    const dy = to.y - from.y;
+    const len = Math.hypot(dx, dy) || 1;
+    const ux = dx / len;
+    const uy = dy / len;
+    return {
+      x1: from.x + ux * insetFrom,
+      y1: from.y + uy * insetFrom,
+      x2: to.x - ux * insetTo,
+      y2: to.y - uy * insetTo,
+    };
+  }
+
   function drawNode(nd) {
     const open = nd.papel === "inicio" || nd.papel === "fim";
     const isCore = nd.papel === "core";
-    const rRing = isCore ? 14 : open ? 9 : 8;
+    const rRing = isCore ? 16 : open ? 9 : 8;
+    if (isCore) {
+      $nodes.appendChild(
+        mk("circle", {
+          cx: nd.x,
+          cy: nd.y,
+          r: 26,
+          class: "gr-node-ring outer pulse",
+        })
+      );
+    }
     const ring = mk("circle", {
       cx: nd.x,
       cy: nd.y,
@@ -440,18 +546,8 @@
         mk("circle", {
           cx: nd.x,
           cy: nd.y,
-          r: isCore ? 3 : 2,
+          r: isCore ? 3.5 : 2,
           class: "gr-node-dot",
-        })
-      );
-    }
-    if (isCore) {
-      $nodes.appendChild(
-        mk("circle", {
-          cx: nd.x,
-          cy: nd.y,
-          r: 20,
-          class: "gr-node-ring outer",
         })
       );
     }
@@ -461,6 +557,7 @@
     let lx;
     let ly;
     let anchor = "middle";
+    let cls = "gr-node-label";
     if (mode === "arc") {
       const below = nd.zona === "oculto" || nd.y >= ARC.splitY;
       const gap = below ? offset + 4 : -(offset + 4);
@@ -468,9 +565,10 @@
       ly = nd.y + gap;
     } else if (nd.papel === "core") {
       lx = nd.x;
-      ly = nd.y + 32;
+      ly = nd.y + 40;
+      cls = "gr-node-label core";
     } else {
-      const lr = R + 16;
+      const lr = R + 20;
       lx = cx + lr * Math.cos(nd.angle);
       ly = cy + lr * Math.sin(nd.angle);
       anchor =
@@ -483,7 +581,7 @@
     const t = mk("text", {
       x: lx,
       y: ly,
-      class: "gr-node-label",
+      class: cls,
       "text-anchor": anchor,
       "dominant-baseline": "middle",
     });
@@ -496,71 +594,20 @@
     $labels.appendChild(t);
   }
 
-  function drawEdgeLabel(e) {
+  function placeEdgeLabelAt(mx, my, e) {
     if (!e.label) return;
-
-    const dx = e.b.x - e.a.x;
-    const dy = e.b.y - e.a.y;
-    const len = Math.hypot(dx, dy) || 1;
-    const ux = dx / len;
-    const uy = dy / len;
-    // perpendicular
-    let nx = -uy;
-    let ny = ux;
-
-    let tAlong = 0.62;
-    let off = 12;
-
-    if (mode === "arc") {
-      // midpoint along chord, push outward from U (away from control point / hatch)
-      tAlong = 0.5;
-      const mx = e.a.x + dx * tAlong;
-      const my = e.a.y + dy * tAlong;
-      // outward = away from ARC control point (x1,y1) roughly center of bowl
-      const toCtrlX = mx - ARC.x1;
-      const toCtrlY = my - ARC.y1;
-      const cl = Math.hypot(toCtrlX, toCtrlY) || 1;
-      nx = toCtrlX / cl;
-      ny = toCtrlY / cl;
-      off = 16;
-    } else {
-      const touchesCore =
-        e.a.papel === "core" || e.b.papel === "core";
-      if (touchesCore) {
-        tAlong = 0.68;
-        // push away from center
-        const mx0 = e.a.x + dx * tAlong;
-        const my0 = e.a.y + dy * tAlong;
-        const fromCx = mx0 - cx;
-        const fromCy = my0 - cy;
-        const fl = Math.hypot(fromCx, fromCy) || 1;
-        nx = fromCx / fl;
-        ny = fromCy / fl;
-        off = 14;
-      } else {
-        // keep labels on consistent side of chord
-        if (nx * (e.a.x + e.b.x - 2 * cx) + ny * (e.a.y + e.b.y - 2 * cy) < 0) {
-          nx = -nx;
-          ny = -ny;
-        }
-      }
-    }
-
-    const mx = e.a.x + dx * tAlong + nx * off;
-    const my = e.a.y + dy * tAlong + ny * off;
-
     const approxW = Math.max(28, e.label.length * 5.2);
     const approxH = 11;
-    const halo = mk("rect", {
-      x: mx - approxW / 2,
-      y: my - approxH / 2 - 1,
-      width: approxW,
-      height: approxH,
-      class: "gr-edge-halo",
-      rx: 2,
-    });
-    $edgeLabels.appendChild(halo);
-
+    $edgeLabels.appendChild(
+      mk("rect", {
+        x: mx - approxW / 2,
+        y: my - approxH / 2 - 1,
+        width: approxW,
+        height: approxH,
+        class: "gr-edge-halo",
+        rx: 2,
+      })
+    );
     const t = mk("text", {
       x: mx,
       y: my,
@@ -577,21 +624,94 @@
     $edgeLabels.appendChild(t);
   }
 
+  function drawEdgeLabel(e) {
+    if (!e.label) return;
+
+    if (mode === "radial" && e.kind === "ring") {
+      const arc = ringArcSpec(e.a, e.b);
+      const off = 14;
+      placeEdgeLabelAt(arc.midX + arc.outX * off, arc.midY + arc.outY * off, e);
+      return;
+    }
+
+    if (mode === "radial" && e.kind === "spoke") {
+      const tAlong = 0.62;
+      const orbit = e.a.papel === "core" ? e.b : e.a;
+      const mx = cx + (orbit.x - cx) * tAlong;
+      const my = cy + (orbit.y - cy) * tAlong;
+      const fl = Math.hypot(orbit.x - cx, orbit.y - cy) || 1;
+      const nx = (orbit.x - cx) / fl;
+      const ny = (orbit.y - cy) / fl;
+      // perpendicular offset so label sits beside spoke
+      placeEdgeLabelAt(mx - ny * 12, my + nx * 12, e);
+      return;
+    }
+
+    const dx = e.b.x - e.a.x;
+    const dy = e.b.y - e.a.y;
+    const tAlong = 0.5;
+    const mx0 = e.a.x + dx * tAlong;
+    const my0 = e.a.y + dy * tAlong;
+    const toCtrlX = mx0 - ARC.x1;
+    const toCtrlY = my0 - ARC.y1;
+    const cl = Math.hypot(toCtrlX, toCtrlY) || 1;
+    placeEdgeLabelAt(
+      mx0 + (toCtrlX / cl) * 16,
+      my0 + (toCtrlY / cl) * 16,
+      e
+    );
+  }
+
   function drawRadial() {
     clear($zones);
     clear($mesh);
+
+    $zones.appendChild(
+      mk("circle", {
+        cx: cx,
+        cy: cy,
+        r: R,
+        class: "gr-guide-ring",
+      })
+    );
+    $zones.appendChild(
+      mk("circle", {
+        cx: cx,
+        cy: cy,
+        r: R * 0.45,
+        class: "gr-guide-ring inner",
+      })
+    );
+
     for (const e of edges) {
-      $edges.appendChild(
-        mk("line", {
-          x1: e.a.x,
-          y1: e.a.y,
-          x2: e.b.x,
-          y2: e.b.y,
-          class: "gr-edge",
-        })
-      );
+      const cls = strokeClass(e.relacionamento, e.animKey);
+      if (e.kind === "spoke") {
+        const from = e.a;
+        const to = e.b;
+        const insetA = from.papel === "core" ? 18 : 10;
+        const insetB = to.papel === "core" ? 18 : 10;
+        const s = insetSpoke(from, to, insetA, insetB);
+        const line = mk("line", {
+          x1: s.x1,
+          y1: s.y1,
+          x2: s.x2,
+          y2: s.y2,
+          class: cls,
+          "marker-end": "url(#gr-arrow)",
+        });
+        $edges.appendChild(line);
+      } else {
+        const arc = ringArcSpec(e.a, e.b);
+        const path = mk("path", {
+          d: arc.path,
+          class: cls + " ring",
+          "marker-end": "url(#gr-arrow)",
+        });
+        $edges.appendChild(path);
+      }
       drawEdgeLabel(e);
     }
+
     for (const nd of nodes) {
       drawNode(nd);
       placeLabel(nd, 16);
@@ -693,13 +813,14 @@
       return;
     }
 
-    if (!edges.length) return;
-    const e = edges[Math.floor(Math.random() * edges.length)];
+    const spokes = edges.filter((e) => e.kind === "spoke");
+    if (!spokes.length) return;
+    const e = spokes[Math.floor(Math.random() * spokes.length)];
     const cfg = ANIM[e.animKey] || ANIM.default;
     const [durMin, durMax] = cfg.duration;
-    const forward = Math.random() < 0.85;
-    const a = forward ? e.a : e.b;
-    const b = forward ? e.b : e.a;
+    // follow direction de → para
+    const a = e.a;
+    const b = e.b;
     const dot = mk("circle", {
       cx: a.x,
       cy: a.y,
@@ -713,17 +834,16 @@
       b,
       dot,
       start: now,
-      duration: durMin + Math.random() * (durMax - durMin),
+      duration: durMin + Math.random() * (durMax - durMin) + 200,
       animKey: e.animKey,
     });
   }
 
   function meanSpawnRate() {
-    if (mode === "arc") return 200;
-    if (!edges.length) return 9999;
-    let sum = 0;
-    for (const e of edges) sum += (ANIM[e.animKey] || ANIM.default).rate;
-    return sum / edges.length;
+    if (mode === "arc") return 280;
+    const spokes = edges.filter((e) => e.kind === "spoke");
+    if (!spokes.length) return 9999;
+    return 320;
   }
 
   function tick(now) {
@@ -733,7 +853,7 @@
     }
 
     const rate = meanSpawnRate();
-    const cap = mode === "arc" ? 10 : Math.min(20, Math.max(6, edges.length * 2));
+    const cap = mode === "arc" ? 6 : 4;
 
     if (now - lastSpawn > rate && packets.length < cap) {
       spawnPacket(now);

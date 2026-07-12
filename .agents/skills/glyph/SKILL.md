@@ -78,8 +78,10 @@ into a glyph that **explains**, not just connects nodes.
 
 - Exactly **one** node with `papel: "core"` (drawn at center).
 - Others: `papel: "orbit"`.
-- Connections only where meaning exists — **not** a complete mesh.
-- Prefer 4–7 edges total; **max 5 connections touching the core** (avoid label pile-up).
+- Prefer **star topology**: almost all edges touch the core (spokes with direction).
+- Orbit–orbit edges only between **ring neighbors** (adjacent on the circle) — never long diagonals through the center.
+- Max **5** spokes; optional one neighbor ring (cycle).
+- Connections only where meaning exists — renderer draws spokes as radial lines and neighbor links as arcs on the guide circle.
 
 ### Mode `arc`
 

@@ -2,12 +2,12 @@
   "metadados": {
     "modo": "radial",
     "titulo": "Glifo Sistêmico",
-    "subtitulo": "Ideia → geometria com núcleo e fluxos nomeados",
+    "subtitulo": "Circuito: núcleo + spokes + anel de vizinhos",
     "tese_central": "Toda ideia complexa pode ser mapeada como sistema fechado radial.",
     "estilo_visual": "dark_minimalist_cyberpunk",
     "narrativa": {
       "diagnostico": "Listas e pirâmides escondem interações; o leitor vê partes, não o sistema.",
-      "pratica": "Coloque a tese no centro. Nomeie cada fluxo. Corte arestas sem significado."
+      "pratica": "Coloque a tese no centro. Spokes nomeados. Anel só entre vizinhos."
     }
   },
   "zonas": [],
@@ -28,39 +28,67 @@
       "animacao": "pulso_rapido"
     },
     {
-      "de": "nos",
+      "de": "tese",
       "para": "fluxos",
       "relacionamento": "alimenta",
       "label": "alimenta",
       "animacao": "pulso_rapido"
     },
     {
-      "de": "fluxos",
+      "de": "tese",
       "para": "ritmo",
       "relacionamento": "define",
       "label": "define",
       "animacao": "fluxo_lento"
     },
     {
+      "de": "tese",
+      "para": "canvas",
+      "relacionamento": "contém",
+      "label": "contém",
+      "animacao": "fluxo_lento"
+    },
+    {
+      "de": "tese",
+      "para": "ink",
+      "relacionamento": "restringe",
+      "label": "corta",
+      "animacao": "fluxo_lento"
+    },
+    {
+      "de": "nos",
+      "para": "fluxos",
+      "relacionamento": "alimenta",
+      "label": "liga",
+      "animacao": "fluxo_lento"
+    },
+    {
+      "de": "fluxos",
+      "para": "ritmo",
+      "relacionamento": "equilibra",
+      "label": "equilibra",
+      "animacao": "fluxo_lento"
+    },
+    {
+      "de": "ritmo",
+      "para": "canvas",
+      "relacionamento": "equilibra",
+      "label": "equilibra",
+      "animacao": "fluxo_lento"
+    },
+    {
       "de": "canvas",
-      "para": "nos",
+      "para": "ink",
       "relacionamento": "contém",
       "label": "contém",
       "animacao": "fluxo_lento"
     },
     {
       "de": "ink",
-      "para": "fluxos",
+      "para": "nos",
       "relacionamento": "restringe",
       "label": "corta",
       "animacao": "fluxo_lento"
-    },
-    {
-      "de": "ritmo",
-      "para": "tese",
-      "relacionamento": "vivifica",
-      "label": "vivifica",
-      "animacao": "pulso_rapido"
     }
   ]
 }
