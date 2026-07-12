@@ -1,5 +1,7 @@
 # Changelogs
 
+(12-07-26 16:34) Release v0.3.0 — radial como circuito lógico (spokes, anéis, traços)
+
 (12-07-26 14:00) Radial como circuito lógico
 - Guias circulares, spokes+seta, anel em arco (sem cordas)
 - Traços solid/dash/dot, pulse no core, packets só em spokes
