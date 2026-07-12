@@ -1,5 +1,7 @@
 # Changelogs
 
+(12-07-26 13:56) Release v0.2.0 — modos radial+/arc + labels de aresta legíveis
+
 (12-07-26 13:51) Fix legibilidade labels + nomenclatura narrativa
 - Edge labels: offset, halo, contraste; arc sem cordas faint
 - Narrativa: diagnóstico / prática (compat problema/trabalho)
