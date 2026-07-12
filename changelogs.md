@@ -1,5 +1,7 @@
 # Changelogs
 
+(12-07-26 16:50) Release v0.4.0 — blueprint + formas + modo venn/Ikigai
+
 (12-07-26 16:45) Blueprint + venn + alinhamento
 - Grid/cantoneiras; core label no head; edge labels longe do centro
 - Formas nos nós; narrativa.sintese; modo venn (Ikigai) + demo
