@@ -1,0 +1,333 @@
+/* iii-style hero viz — tokens + layout (MVP) */
+:root {
+  --bg: #111110;
+  --panel: #1a1916;
+  --ink: #f2f0ed;
+  --ink-faint: #9c9893;
+  --ink-ghost: #5d5a55;
+  --rule: #2a2926;
+  --accent: #3ea8ff;
+  --font: ui-monospace, "SF Mono", "Cascadia Code", Menlo, monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+}
+
+.demo-shell {
+  max-width: 52rem;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+}
+
+.demo-kicker {
+  margin: 0 0 0.5rem;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.demo-title {
+  margin: 0 0 0.35rem;
+  font-size: 1.35rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.demo-note {
+  margin: 0 0 1.5rem;
+  max-width: 38rem;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--ink-faint);
+}
+
+.hero-viz {
+  border: 1px solid var(--rule);
+  background: var(--bg);
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  min-width: 0;
+}
+
+.hero-viz-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px 10px 18px;
+  border-bottom: 1px solid var(--rule);
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+}
+
+.hero-viz-head .label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-viz-head .pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 0 rgba(62, 168, 255, 0.45);
+  animation: hv-pulse 1.6s ease-out infinite;
+}
+
+@keyframes hv-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(62, 168, 255, 0.45);
+  }
+  100% {
+    box-shadow: 0 0 0 8px rgba(62, 168, 255, 0);
+  }
+}
+
+.hero-viz-head .stage-name {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.hero-viz-tabs {
+  display: flex;
+  border: 1px solid var(--rule);
+}
+
+.hero-viz-tabs button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  color: var(--ink-faint);
+  padding: 4px 8px;
+  cursor: pointer;
+  text-transform: lowercase;
+  transition: background 0.15s, color 0.15s;
+}
+
+.hero-viz-tabs button + button {
+  border-left: 1px solid var(--rule);
+}
+
+.hero-viz-tabs button:hover {
+  color: var(--ink);
+}
+
+.hero-viz-tabs button.on {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.hero-viz-canvas {
+  position: relative;
+  aspect-ratio: 5 / 4;
+  width: 100%;
+  overflow: hidden;
+}
+
+.hero-viz-canvas svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.hv-node-ring {
+  fill: var(--bg);
+  stroke: var(--ink);
+  stroke-width: 1.25;
+}
+
+.hv-node-dot {
+  fill: var(--ink);
+}
+
+.hv-node-label {
+  font-family: var(--font);
+  font-size: 9px;
+  fill: var(--ink-faint);
+  text-transform: lowercase;
+  letter-spacing: 0.04em;
+}
+
+.hv-edge-mesh {
+  stroke: var(--ink-faint);
+  stroke-width: 0.6;
+  stroke-dasharray: 1.5 2.5;
+  fill: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.hv-edge-actual {
+  stroke: var(--ink);
+  stroke-width: 1;
+  fill: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.hv-edge-ephemeral {
+  stroke: var(--accent);
+  stroke-width: 1.25;
+  fill: none;
+  opacity: 0;
+}
+
+.hv-packet {
+  fill: var(--accent);
+}
+
+.hv-packet.dim {
+  fill: var(--ink);
+}
+
+.hero-viz[data-stage="mesh"] .hv-edge-mesh {
+  opacity: 0.55;
+}
+
+.hero-viz[data-stage="actual"] .hv-edge-mesh {
+  opacity: 0.08;
+}
+
+.hero-viz[data-stage="actual"] .hv-edge-actual {
+  opacity: 1;
+}
+
+.hero-viz[data-stage="iii"] .hv-edge-mesh,
+.hero-viz[data-stage="iii"] .hv-edge-actual {
+  opacity: 0;
+}
+
+.hero-viz-complexity {
+  border-top: 1px solid var(--rule);
+  padding: 10px 18px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hv-complex-chart {
+  width: 100%;
+  height: 80px;
+  display: block;
+}
+
+.hv-complex-copy {
+  text-align: center;
+}
+
+.hv-cc-axis {
+  stroke: var(--ink-faint);
+  stroke-width: 1;
+  fill: none;
+  opacity: 0.65;
+}
+
+.hv-cc-q,
+.hv-cc-l,
+.hv-cc-f {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  transition: opacity 0.45s ease, stroke-width 0.35s ease;
+}
+
+.hero-viz[data-stage="mesh"] .hv-cc-q {
+  stroke: var(--ink);
+  opacity: 1;
+  stroke-width: 1.35;
+}
+
+.hero-viz[data-stage="mesh"] .hv-cc-l {
+  stroke: var(--ink-faint);
+  opacity: 0.32;
+  stroke-width: 1;
+}
+
+.hero-viz[data-stage="mesh"] .hv-cc-f {
+  opacity: 0;
+}
+
+.hero-viz[data-stage="actual"] .hv-cc-q {
+  stroke: var(--ink-faint);
+  opacity: 0.28;
+  stroke-width: 1;
+}
+
+.hero-viz[data-stage="actual"] .hv-cc-l {
+  stroke: var(--ink);
+  opacity: 1;
+  stroke-width: 1.35;
+}
+
+.hero-viz[data-stage="actual"] .hv-cc-f {
+  opacity: 0;
+}
+
+.hero-viz[data-stage="iii"] .hv-cc-q,
+.hero-viz[data-stage="iii"] .hv-cc-l {
+  stroke: var(--ink-faint);
+  opacity: 0.2;
+  stroke-width: 1;
+}
+
+.hero-viz[data-stage="iii"] .hv-cc-f {
+  stroke: var(--accent);
+  opacity: 1;
+  stroke-width: 1.45;
+}
+
+.hv-formula {
+  font-size: 18px;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.hv-formula math {
+  font-family: "Cambria Math", "Latin Modern Math", serif;
+  font-size: 1.15em;
+}
+
+.hero-viz-foot {
+  border-top: 1px solid var(--rule);
+  padding: 10px 18px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--ink-faint);
+  text-transform: lowercase;
+}
+
+.hv-count {
+  color: var(--ink);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.hv-count.accent {
+  color: var(--accent);
+}
+
+@media (max-width: 640px) {
+  .hero-viz-head .label {
+    display: none;
+  }
+}

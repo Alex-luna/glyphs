@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Glyph renderer — tese → glifo</title>
+    <link rel="stylesheet" href="./glyph-renderer.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <p class="kicker">tools · glyph-renderer</p>
+      <h1 class="title">glyph renderer</h1>
+      <p class="note">
+        Cola o JSON da skill <code>glyph</code> e renderiza. Mesh fraco de fundo +
+        arestas das conexões + packets por <code>animacao</code>.
+      </p>
+
+      <div class="layout">
+        <aside class="panel" aria-label="JSON input">
+          <label class="panel-label" for="glyph-json">json</label>
+          <textarea
+            id="glyph-json"
+            spellcheck="false"
+            rows="18"
+            placeholder='{ "metadados": { ... }, "nos": [...], "conexoes": [...] }'
+          ></textarea>
+          <div class="panel-actions">
+            <button type="button" id="btn-render">render</button>
+            <button type="button" id="btn-example" class="ghost">exemplo</button>
+          </div>
+          <p class="panel-error" id="glyph-error" hidden></p>
+        </aside>
+
+        <aside
+          class="glyph-viz"
+          id="glyph-viz"
+          aria-label="Systemic glyph visualization"
+        >
+          <div class="glyph-viz-head">
+            <span class="label">
+              <span class="pulse" aria-hidden="true"></span>
+              <span class="tese" id="glyph-tese">cole um glifo</span>
+            </span>
+            <span class="meta" id="glyph-meta">0 nós · 0 fluxos</span>
+          </div>
+
+          <div class="glyph-viz-canvas" id="glyph-canvas">
+            <svg
+              class="main"
+              viewBox="0 0 400 400"
+              preserveAspectRatio="xMidYMid meet"
+              aria-hidden="true"
+            >
+              <g id="gr-edges-mesh"></g>
+              <g id="gr-edges"></g>
+              <g id="gr-packets"></g>
+              <g id="gr-nodes"></g>
+              <g id="gr-labels"></g>
+            </svg>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <script src="./glyph-renderer.js"></script>
+  </body>
+</html>

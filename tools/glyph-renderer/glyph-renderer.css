@@ -1,0 +1,264 @@
+/* Glyph renderer — dark minimal tokens (iii-inspired) */
+:root {
+  --bg: #111110;
+  --panel: #1a1916;
+  --ink: #f2f0ed;
+  --ink-faint: #9c9893;
+  --ink-ghost: #5d5a55;
+  --rule: #2a2926;
+  --accent: #3ea8ff;
+  --danger: #e07070;
+  --font: ui-monospace, "SF Mono", "Cascadia Code", Menlo, monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+}
+
+.shell {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+}
+
+.kicker {
+  margin: 0 0 0.5rem;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.title {
+  margin: 0 0 0.35rem;
+  font-size: 1.35rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.note {
+  margin: 0 0 1.5rem;
+  max-width: 40rem;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--ink-faint);
+}
+
+.note code {
+  color: var(--ink);
+  font-size: 0.95em;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.panel {
+  border: 1px solid var(--rule);
+  background: var(--panel);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 12px;
+  gap: 10px;
+}
+
+.panel-label {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+#glyph-json {
+  flex: 1;
+  min-height: 280px;
+  width: 100%;
+  resize: vertical;
+  border: 1px solid var(--rule);
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: 11px;
+  line-height: 1.45;
+  padding: 10px;
+}
+
+#glyph-json:focus {
+  outline: 1px solid var(--accent);
+  outline-offset: 0;
+}
+
+.panel-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.panel-actions button {
+  appearance: none;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--bg);
+  font: inherit;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+.panel-actions button.ghost {
+  background: transparent;
+  color: var(--ink-faint);
+  border-color: var(--rule);
+}
+
+.panel-actions button:hover {
+  filter: brightness(1.08);
+}
+
+.panel-actions button.ghost:hover {
+  color: var(--ink);
+  border-color: var(--ink-ghost);
+}
+
+.panel-error {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--danger);
+}
+
+.glyph-viz {
+  border: 1px solid var(--rule);
+  background: var(--bg);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-width: 0;
+}
+
+.glyph-viz-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px 10px 18px;
+  border-bottom: 1px solid var(--rule);
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
+}
+
+.glyph-viz-head .label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.glyph-viz-head .pulse {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 0 rgba(62, 168, 255, 0.45);
+  animation: gr-pulse 1.6s ease-out infinite;
+}
+
+@keyframes gr-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(62, 168, 255, 0.45);
+  }
+  100% {
+    box-shadow: 0 0 0 8px rgba(62, 168, 255, 0);
+  }
+}
+
+.glyph-viz-head .tese {
+  color: var(--ink);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.glyph-viz-head .meta {
+  flex-shrink: 0;
+  text-transform: lowercase;
+}
+
+.glyph-viz-canvas {
+  position: relative;
+  aspect-ratio: 1;
+  width: 100%;
+  overflow: hidden;
+}
+
+.glyph-viz-canvas svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.gr-node-ring {
+  fill: var(--bg);
+  stroke: var(--ink);
+  stroke-width: 1.25;
+}
+
+.gr-node-dot {
+  fill: var(--ink);
+}
+
+.gr-node-label {
+  font-family: var(--font);
+  font-size: 9px;
+  fill: var(--ink-faint);
+  text-transform: lowercase;
+  letter-spacing: 0.04em;
+}
+
+.gr-edge-mesh {
+  stroke: var(--ink-faint);
+  stroke-width: 0.55;
+  stroke-dasharray: 1.5 2.5;
+  fill: none;
+  opacity: 0.12;
+}
+
+.gr-edge {
+  stroke: var(--ink);
+  stroke-width: 1;
+  fill: none;
+  opacity: 0.9;
+}
+
+.gr-packet {
+  fill: var(--accent);
+}
+
+.gr-packet.dim {
+  fill: var(--ink);
+}
+
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}

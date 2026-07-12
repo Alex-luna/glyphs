@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hero viz MVP — quadratic → linear → ephemeral</title>
+    <link rel="stylesheet" href="./hero-viz.css" />
+  </head>
+  <body>
+    <div class="demo-shell">
+      <p class="demo-kicker">mvp · expert-os</p>
+      <h1 class="demo-title">hero viz (estilo iii.dev)</h1>
+      <p class="demo-note">
+        SVG + vanilla JS. Três estágios: mesh completo (45 integrações), subgrafo
+        atual (~20), e iii (arestas efêmeras + O(0)). Tabs alternam; sem clique,
+        cicla a cada 4.2s.
+      </p>
+
+      <aside
+        class="hero-viz"
+        id="hero-viz"
+        aria-label="From quadratic to linear to ephemeral"
+        data-stage="mesh"
+      >
+        <div class="hero-viz-head">
+          <span class="label">
+            <span class="pulse" aria-hidden="true"></span>
+            <span class="stage-name" id="hv-stage-name">problem space</span>
+          </span>
+          <div class="hero-viz-tabs" role="tablist" aria-label="Stage">
+            <button type="button" data-stage="mesh" class="on">
+              problem space
+            </button>
+            <button type="button" data-stage="actual">current</button>
+            <button type="button" data-stage="iii">iii</button>
+          </div>
+        </div>
+
+        <div class="hero-viz-canvas" id="hv-canvas">
+          <svg
+            class="main"
+            viewBox="0 0 400 400"
+            preserveAspectRatio="xMidYMid meet"
+            aria-hidden="true"
+          >
+            <g id="hv-edges-mesh"></g>
+            <g id="hv-edges-actual"></g>
+            <g id="hv-edges-ephemeral"></g>
+            <g id="hv-packets"></g>
+            <g id="hv-nodes"></g>
+            <g id="hv-labels"></g>
+          </svg>
+        </div>
+
+        <div class="hero-viz-complexity" aria-live="polite">
+          <svg
+            class="hv-complex-chart"
+            viewBox="22 0 186 118"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <line class="hv-cc-axis" x1="22" y1="94" x2="208" y2="94"></line>
+            <line class="hv-cc-axis" x1="22" y1="94" x2="22" y2="14"></line>
+            <path
+              class="hv-cc-q"
+              d="M 22 94 L 45.3 92.8 L 68.5 89.4 L 91.8 83.6 L 115 75.5 L 138.3 65.1 L 161.5 52.4 L 184.8 37.3 L 208 20"
+            ></path>
+            <path
+              class="hv-cc-l"
+              d="M 22 94 L 45.3 93.5 L 68.5 91.9 L 91.8 89.2 L 115 85.5 L 138.3 80.7 L 161.5 74.9 L 184.8 67.9 L 208 60"
+            ></path>
+            <path class="hv-cc-f" d="M 22 94 L 208 94"></path>
+          </svg>
+          <div class="hv-complex-copy">
+            <span class="hv-formula" id="hv-formula"></span>
+          </div>
+        </div>
+
+        <div class="hero-viz-foot">
+          <span
+            ><span id="hv-count" class="hv-count">45</span>
+            <span>integrations</span></span
+          >
+        </div>
+      </aside>
+    </div>
+
+    <script src="./hero-viz.js"></script>
+  </body>
+</html>
