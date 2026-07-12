@@ -1,5 +1,7 @@
 # Changelogs
 
+(12-07-26 13:28) Release v0.1.1 — fixes frame overflow + canvas círculo oval
+
 (12-07-26 13:26) Fix canvas SVG não-quadrado (círculo torto)
 - Layout align-items start; canvas aspect-ratio 1 sem stretch 1fr
 
