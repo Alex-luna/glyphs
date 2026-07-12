@@ -1,5 +1,8 @@
 # Changelogs
 
+(12-07-26 13:26) Fix canvas SVG não-quadrado (círculo torto)
+- Layout align-items start; canvas aspect-ratio 1 sem stretch 1fr
+
 (12-07-26 13:20) Fix glifo fora do frame
 - Renderer: R=110, viewBox padded, truncate labels 14 chars
 - Parse aceita fence ```json; skill exige labels curtos
