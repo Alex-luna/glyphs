@@ -1,5 +1,9 @@
 # Changelogs
 
+(12-07-26 14:00) Radial como circuito lógico
+- Guias circulares, spokes+seta, anel em arco (sem cordas)
+- Traços solid/dash/dot, pulse no core, packets só em spokes
+
 (12-07-26 13:56) Release v0.2.0 — modos radial+/arc + labels de aresta legíveis
 
 (12-07-26 13:51) Fix legibilidade labels + nomenclatura narrativa
