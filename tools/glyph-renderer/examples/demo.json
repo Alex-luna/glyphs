@@ -6,8 +6,8 @@
     "tese_central": "Toda ideia complexa pode ser mapeada como sistema fechado radial.",
     "estilo_visual": "dark_minimalist_cyberpunk",
     "narrativa": {
-      "problema": "Listas e pirâmides escondem interações; o leitor vê partes, não o sistema.",
-      "trabalho": "Coloque a tese no centro. Nomeie cada fluxo. Corte arestas sem significado."
+      "diagnostico": "Listas e pirâmides escondem interações; o leitor vê partes, não o sistema.",
+      "pratica": "Coloque a tese no centro. Nomeie cada fluxo. Corte arestas sem significado."
     }
   },
   "zonas": [],

@@ -24,7 +24,7 @@ into a glyph that **explains**, not just connects nodes.
 
 1. Pick `modo` (`radial` or `arc`).
 2. Name the model: `titulo` + `subtitulo` + `tese_central`.
-3. Write `narrativa.problema` + `narrativa.trabalho` (1–2 sentences each).
+3. Write `narrativa.diagnostico` + `narrativa.pratica` (1–2 sentences each).
 4. Build nodes + connections with **edge labels** (short verbs).
 5. Output **ONLY** the JSON — no prose before/after.
 6. Then tell user: open `tools/glyph-renderer/index.html`, paste, Render.
@@ -40,8 +40,8 @@ into a glyph that **explains**, not just connects nodes.
     "tese_central": "frase curta",
     "estilo_visual": "dark_minimalist_cyberpunk",
     "narrativa": {
-      "problema": "o que falha / o mito",
-      "trabalho": "o que o modelo pede"
+      "diagnostico": "o que está quebrado / o mito",
+      "pratica": "o que o modelo pede pra fazer"
     }
   },
   "zonas": [],
@@ -67,7 +67,7 @@ into a glyph that **explains**, not just connects nodes.
 
 ### Rules (all modes)
 
-- `titulo`, `subtitulo`, `tese_central`, `narrativa.problema`, `narrativa.trabalho` required.
+- `titulo`, `subtitulo`, `tese_central`, `narrativa.diagnostico`, `narrativa.pratica` required.
 - Every `conexoes[]` needs `label` (verb, **max 12 chars**).
 - Node `label`: lowercase, 1–2 words, **max 14 chars**.
 - `id`: short token.
@@ -79,7 +79,7 @@ into a glyph that **explains**, not just connects nodes.
 - Exactly **one** node with `papel: "core"` (drawn at center).
 - Others: `papel: "orbit"`.
 - Connections only where meaning exists — **not** a complete mesh.
-- Prefer 4–7 orbit edges that tell the thesis.
+- Prefer 4–7 edges total; **max 5 connections touching the core** (avoid label pile-up).
 
 ### Mode `arc`
 

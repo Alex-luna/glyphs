@@ -6,8 +6,8 @@
     "tese_central": "Mudança real desce ao oculto antes de emergir de novo.",
     "estilo_visual": "dark_minimalist_cyberpunk",
     "narrativa": {
-      "problema": "Tentar mudar só o visível (hábito, output) ignora a ruptura e o trabalho interno.",
-      "trabalho": "Nomeie a descida, o fundo e a subida. Trate o oculto como zona, não como falha."
+      "diagnostico": "Tentar mudar só o visível (hábito, output) ignora a ruptura e o trabalho interno.",
+      "pratica": "Nomeie a descida, o fundo e a subida. Trate o oculto como zona, não como falha."
     }
   },
   "zonas": [

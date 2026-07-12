@@ -266,12 +266,20 @@ body {
   letter-spacing: 0.04em;
 }
 
+.gr-edge-halo {
+  fill: var(--bg);
+  opacity: 0.88;
+  stroke: none;
+  pointer-events: none;
+}
+
 .gr-edge-label {
   font-family: var(--font);
-  font-size: 7px;
-  fill: var(--ink-ghost);
+  font-size: 8px;
+  fill: var(--ink);
   text-transform: lowercase;
   letter-spacing: 0.03em;
+  opacity: 0.92;
 }
 
 .gr-edge {

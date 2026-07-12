@@ -12,9 +12,9 @@
         "Toda ideia complexa pode ser mapeada como sistema fechado radial.",
       estilo_visual: "dark_minimalist_cyberpunk",
       narrativa: {
-        problema:
+        diagnostico:
           "Listas e pirâmides escondem interações; o leitor vê partes, não o sistema.",
-        trabalho:
+        pratica:
           "Coloque a tese no centro. Nomeie cada fluxo. Corte arestas sem significado.",
       },
     },
@@ -81,9 +81,9 @@
       tese_central: "Mudança real desce ao oculto antes de emergir de novo.",
       estilo_visual: "dark_minimalist_cyberpunk",
       narrativa: {
-        problema:
+        diagnostico:
           "Tentar mudar só o visível (hábito, output) ignora a ruptura e o trabalho interno.",
-        trabalho:
+        pratica:
           "Nomeie a descida, o fundo e a subida. Trate o oculto como zona, não como falha.",
       },
     },
@@ -201,8 +201,8 @@
   const $sub = document.getElementById("glyph-sub");
   const $meta = document.getElementById("glyph-meta");
   const $narr = document.getElementById("glyph-narrative");
-  const $problema = document.getElementById("glyph-problema");
-  const $trabalho = document.getElementById("glyph-trabalho");
+  const $diagnostico = document.getElementById("glyph-diagnostico");
+  const $pratica = document.getElementById("glyph-pratica");
   const $zones = document.getElementById("gr-zones");
   const $mesh = document.getElementById("gr-edges-mesh");
   const $edges = document.getElementById("gr-edges");
@@ -462,9 +462,10 @@
     let ly;
     let anchor = "middle";
     if (mode === "arc") {
-      const below = nd.y >= ARC.splitY;
+      const below = nd.zona === "oculto" || nd.y >= ARC.splitY;
+      const gap = below ? offset + 4 : -(offset + 4);
       lx = nd.x;
-      ly = nd.y + (below ? offset : -offset);
+      ly = nd.y + gap;
     } else if (nd.papel === "core") {
       lx = nd.x;
       ly = nd.y + 32;
@@ -497,14 +498,75 @@
 
   function drawEdgeLabel(e) {
     if (!e.label) return;
-    const mx = (e.a.x + e.b.x) / 2;
-    const my = (e.a.y + e.b.y) / 2;
+
+    const dx = e.b.x - e.a.x;
+    const dy = e.b.y - e.a.y;
+    const len = Math.hypot(dx, dy) || 1;
+    const ux = dx / len;
+    const uy = dy / len;
+    // perpendicular
+    let nx = -uy;
+    let ny = ux;
+
+    let tAlong = 0.62;
+    let off = 12;
+
+    if (mode === "arc") {
+      // midpoint along chord, push outward from U (away from control point / hatch)
+      tAlong = 0.5;
+      const mx = e.a.x + dx * tAlong;
+      const my = e.a.y + dy * tAlong;
+      // outward = away from ARC control point (x1,y1) roughly center of bowl
+      const toCtrlX = mx - ARC.x1;
+      const toCtrlY = my - ARC.y1;
+      const cl = Math.hypot(toCtrlX, toCtrlY) || 1;
+      nx = toCtrlX / cl;
+      ny = toCtrlY / cl;
+      off = 16;
+    } else {
+      const touchesCore =
+        e.a.papel === "core" || e.b.papel === "core";
+      if (touchesCore) {
+        tAlong = 0.68;
+        // push away from center
+        const mx0 = e.a.x + dx * tAlong;
+        const my0 = e.a.y + dy * tAlong;
+        const fromCx = mx0 - cx;
+        const fromCy = my0 - cy;
+        const fl = Math.hypot(fromCx, fromCy) || 1;
+        nx = fromCx / fl;
+        ny = fromCy / fl;
+        off = 14;
+      } else {
+        // keep labels on consistent side of chord
+        if (nx * (e.a.x + e.b.x - 2 * cx) + ny * (e.a.y + e.b.y - 2 * cy) < 0) {
+          nx = -nx;
+          ny = -ny;
+        }
+      }
+    }
+
+    const mx = e.a.x + dx * tAlong + nx * off;
+    const my = e.a.y + dy * tAlong + ny * off;
+
+    const approxW = Math.max(28, e.label.length * 5.2);
+    const approxH = 11;
+    const halo = mk("rect", {
+      x: mx - approxW / 2,
+      y: my - approxH / 2 - 1,
+      width: approxW,
+      height: approxH,
+      class: "gr-edge-halo",
+      rx: 2,
+    });
+    $edgeLabels.appendChild(halo);
+
     const t = mk("text", {
       x: mx,
-      y: my - 4,
+      y: my,
       class: "gr-edge-label",
       "text-anchor": "middle",
-      "dominant-baseline": "auto",
+      "dominant-baseline": "middle",
     });
     t.textContent = e.label;
     if (e.labelFull && e.labelFull !== e.label) {
@@ -540,7 +602,6 @@
     clear($mesh);
     const pathD = `M ${ARC.x0} ${ARC.y0} Q ${ARC.x1} ${ARC.y1} ${ARC.x2} ${ARC.y2}`;
 
-    // hatch below split line under the U
     const hatch = mk("path", {
       d: `${pathD} L ${ARC.x2} ${ARC.splitY} L ${ARC.x0} ${ARC.splitY} Z`,
       class: "gr-hatch",
@@ -582,23 +643,14 @@
 
     $edges.appendChild(mk("path", { d: pathD, class: "gr-arc-path" }));
 
-    // sequential chords with labels (optional meaning on hops)
+    // path alone = journey; labels only (no faint chords)
     for (const e of edges) {
-      $edges.appendChild(
-        mk("line", {
-          x1: e.a.x,
-          y1: e.a.y,
-          x2: e.b.x,
-          y2: e.b.y,
-          class: "gr-edge faint",
-        })
-      );
       drawEdgeLabel(e);
     }
 
     for (const nd of nodes) {
       drawNode(nd);
-      placeLabel(nd, 14);
+      placeLabel(nd, 16);
     }
   }
 
@@ -716,15 +768,15 @@
 
   function setNarrative(meta) {
     const n = (meta && meta.narrativa) || {};
-    const problema = n.problema || "";
-    const trabalho = n.trabalho || "";
-    if (!problema && !trabalho) {
+    const diagnostico = n.diagnostico || n.problema || "";
+    const pratica = n.pratica || n.trabalho || "";
+    if (!diagnostico && !pratica) {
       $narr.hidden = true;
       return;
     }
     $narr.hidden = false;
-    $problema.textContent = problema;
-    $trabalho.textContent = trabalho;
+    $diagnostico.textContent = diagnostico;
+    $pratica.textContent = pratica;
   }
 
   function render(data) {

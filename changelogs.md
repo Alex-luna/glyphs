@@ -1,5 +1,9 @@
 # Changelogs
 
+(12-07-26 13:51) Fix legibilidade labels + nomenclatura narrativa
+- Edge labels: offset, halo, contraste; arc sem cordas faint
+- Narrativa: diagnóstico / prática (compat problema/trabalho)
+
 (12-07-26 13:36) Modos radial+ e arc (comunicação Alan Hong–style)
 - Skill escolhe radial|arc; titulo/subtitulo/narrativa; labels de aresta
 - Renderer: núcleo central, sem mesh K_n, modo arc U + zonas + demos
