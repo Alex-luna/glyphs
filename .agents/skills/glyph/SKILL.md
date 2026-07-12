@@ -2,69 +2,98 @@
 name: glyph
 description: >
   Translates theses, business ideas, or abstract essays into a Systemic Glyph —
-  a strict circular network JSON (nodes + directed flows + animation). Use when
-  user mentions glifo, glyph, tese→glifo, systems thinking, mapa radial, círculo
-  de transmutação, Witch Hat / FMA style concept maps, or asks to translate an
-  idea into geometry.
+  JSON for radial+ (system/cycle) or arc (journey) modes with narrative and
+  edge labels. Use when user mentions glifo, glyph, tese→glifo, modes radial/arc,
+  systems thinking, mapa radial, jornada, Coherence Arc style, or Alan Hong /
+  Codexx style visual models.
 ---
 
-# Glyph — tese → JSON
+# Glyph — tese → JSON (radial+ | arc)
 
-You are a Visual Systems Engineer and Graphic Epistemologist. Receive a thesis,
-article, or abstract idea and convert it into a strict circular network glyph
-spec.
+You are a Visual Systems Engineer and Graphic Epistemologist. Convert a thesis
+into a glyph that **explains**, not just connects nodes.
+
+## Choose mode
+
+| Modo | Quando |
+|------|--------|
+| `radial` | Sistema estático, ciclo, órbita em torno de um núcleo |
+| `arc` | Processo, jornada, transformação, “do X ao Y”, preço da mudança |
 
 ## Workflow
 
-1. Isolate the main thesis in one short sentence.
-2. Identify 4–8 essential components (nodes) that orbit that thesis.
-3. Map logical connections (flows): direction + relationship type
-   (`alimenta`, `opõe`, `equilibra`, etc.) + animation
-   (`pulso_rapido`, `fluxo_lento`, or omit for default).
-4. Output **ONLY** the JSON object below — no prose before or after.
-5. After the JSON fence (or in a follow-up if user asks), tell them:
-   open `tools/glyph-renderer/index.html`, paste JSON, hit Render.
+1. Pick `modo` (`radial` or `arc`).
+2. Name the model: `titulo` + `subtitulo` + `tese_central`.
+3. Write `narrativa.problema` + `narrativa.trabalho` (1–2 sentences each).
+4. Build nodes + connections with **edge labels** (short verbs).
+5. Output **ONLY** the JSON — no prose before/after.
+6. Then tell user: open `tools/glyph-renderer/index.html`, paste, Render.
 
-## Design constraints (keep in mind while choosing nodes)
-
-- **Radial topology** — components on the circumference, not a hierarchy list.
-- **Constrained canvas** — `n` nodes → equal angle slices (`2π/n`).
-- **Data-ink** — few nodes, clear edges; no decorative junk in the JSON.
-- **Short labels** — renderer clips long text; keep labels iii-style.
-
-## Output schema
+## Schema
 
 ```json
 {
   "metadados": {
-    "tese_central": "[short sentence]",
-    "estilo_visual": "dark_minimalist_cyberpunk"
+    "modo": "radial",
+    "titulo": "Nome do modelo",
+    "subtitulo": "uma linha",
+    "tese_central": "frase curta",
+    "estilo_visual": "dark_minimalist_cyberpunk",
+    "narrativa": {
+      "problema": "o que falha / o mito",
+      "trabalho": "o que o modelo pede"
+    }
   },
+  "zonas": [],
   "nos": [
-    { "id": "atencao", "label": "atenção", "categoria": "recurso" }
+    {
+      "id": "core_id",
+      "label": "núcleo",
+      "papel": "core",
+      "categoria": "nucleo"
+    }
   ],
   "conexoes": [
     {
-      "de": "atencao",
-      "para": "energia",
+      "de": "core_id",
+      "para": "orbit_id",
       "relacionamento": "alimenta",
+      "label": "alimenta",
       "animacao": "pulso_rapido"
     }
   ]
 }
 ```
 
-Rules:
+### Rules (all modes)
 
-- `nos.length` must be 4–8.
-- Every `conexoes.de` / `conexoes.para` must match a `nos.id`.
-- `label`: lowercase, 1–2 words, **max 14 characters** (ex: `atenção`, `energia`, `prioridade` — not `orquestração de atenção`).
-- `id`: short token matching or abbreviating the label (`snake` or single word).
-- `estilo_visual` stays `dark_minimalist_cyberpunk` unless user asks otherwise.
+- `titulo`, `subtitulo`, `tese_central`, `narrativa.problema`, `narrativa.trabalho` required.
+- Every `conexoes[]` needs `label` (verb, **max 12 chars**).
+- Node `label`: lowercase, 1–2 words, **max 14 chars**.
+- `id`: short token.
+- `estilo_visual`: `dark_minimalist_cyberpunk` unless user asks otherwise.
+- 4–8 nodes total.
+
+### Mode `radial`
+
+- Exactly **one** node with `papel: "core"` (drawn at center).
+- Others: `papel: "orbit"`.
+- Connections only where meaning exists — **not** a complete mesh.
+- Prefer 4–7 orbit edges that tell the thesis.
+
+### Mode `arc`
+
+- `zonas`: typically `[{ "id": "visivel", "label": "visível" }, { "id": "oculto", "label": "oculto" }]`.
+- Nodes ordered by `ordem` (1…n) along the U path.
+- Papéis: first = `inicio`, last = `fim`, middle = `marco`.
+- Optional `zona`: `"visivel"` | `"oculto"` (below dashed line = oculto).
+- Connections usually sequential (`ordem` i → i+1); skip mesh.
 
 ## Renderer
 
-Local tool: [`tools/glyph-renderer/`](../../../tools/glyph-renderer/).
-Demo JSON: [`tools/glyph-renderer/examples/demo.json`](../../../tools/glyph-renderer/examples/demo.json).
+[`tools/glyph-renderer/`](../../../tools/glyph-renderer/)  
+Demos: `examples/demo.json` (radial), `examples/demo-arc.json` (arc).
 
-Conceptual source (do not edit): [`Docs/Prompts/inbox/Ideia Central.md`](../../../Docs/Prompts/inbox/Ideia%20Central.md).
+Refs: [`refs_AlanHong/`](../../../Docs/Glyphs-Project%20Reference/References/refs_AlanHong/) — communication density target, not pixel copy.
+
+Conceptual source (do not edit): [`Ideia Central.md`](../../../Docs/Prompts/inbox/Ideia%20Central.md).

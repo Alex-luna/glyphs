@@ -1,0 +1,104 @@
+{
+  "metadados": {
+    "modo": "arc",
+    "titulo": "Arco de Coerência",
+    "subtitulo": "Do automático ao soberano — o preço de se tornar",
+    "tese_central": "Mudança real desce ao oculto antes de emergir de novo.",
+    "estilo_visual": "dark_minimalist_cyberpunk",
+    "narrativa": {
+      "problema": "Tentar mudar só o visível (hábito, output) ignora a ruptura e o trabalho interno.",
+      "trabalho": "Nomeie a descida, o fundo e a subida. Trate o oculto como zona, não como falha."
+    }
+  },
+  "zonas": [
+    { "id": "visivel", "label": "visível" },
+    { "id": "oculto", "label": "oculto" }
+  ],
+  "nos": [
+    {
+      "id": "herdado",
+      "label": "herdado",
+      "papel": "inicio",
+      "zona": "visivel",
+      "ordem": 1,
+      "categoria": "marco"
+    },
+    {
+      "id": "ruptura",
+      "label": "ruptura",
+      "papel": "marco",
+      "zona": "visivel",
+      "ordem": 2,
+      "categoria": "marco"
+    },
+    {
+      "id": "dissolucao",
+      "label": "dissolução",
+      "papel": "marco",
+      "zona": "oculto",
+      "ordem": 3,
+      "categoria": "marco"
+    },
+    {
+      "id": "regulacao",
+      "label": "regulação",
+      "papel": "marco",
+      "zona": "oculto",
+      "ordem": 4,
+      "categoria": "marco"
+    },
+    {
+      "id": "renascimento",
+      "label": "renascimento",
+      "papel": "marco",
+      "zona": "visivel",
+      "ordem": 5,
+      "categoria": "marco"
+    },
+    {
+      "id": "soberano",
+      "label": "soberano",
+      "papel": "fim",
+      "zona": "visivel",
+      "ordem": 6,
+      "categoria": "marco"
+    }
+  ],
+  "conexoes": [
+    {
+      "de": "herdado",
+      "para": "ruptura",
+      "relacionamento": "quebra",
+      "label": "quebra",
+      "animacao": "pulso_rapido"
+    },
+    {
+      "de": "ruptura",
+      "para": "dissolucao",
+      "relacionamento": "desce",
+      "label": "desce",
+      "animacao": "fluxo_lento"
+    },
+    {
+      "de": "dissolucao",
+      "para": "regulacao",
+      "relacionamento": "trabalha",
+      "label": "trabalha",
+      "animacao": "fluxo_lento"
+    },
+    {
+      "de": "regulacao",
+      "para": "renascimento",
+      "relacionamento": "sobe",
+      "label": "sobe",
+      "animacao": "pulso_rapido"
+    },
+    {
+      "de": "renascimento",
+      "para": "soberano",
+      "relacionamento": "emerge",
+      "label": "emerge",
+      "animacao": "pulso_rapido"
+    }
+  ]
+}

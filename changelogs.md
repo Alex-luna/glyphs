@@ -1,5 +1,9 @@
 # Changelogs
 
+(12-07-26 13:36) Modos radial+ e arc (comunicação Alan Hong–style)
+- Skill escolhe radial|arc; titulo/subtitulo/narrativa; labels de aresta
+- Renderer: núcleo central, sem mesh K_n, modo arc U + zonas + demos
+
 (12-07-26 13:28) Release v0.1.1 — fixes frame overflow + canvas círculo oval
 
 (12-07-26 13:26) Fix canvas SVG não-quadrado (círculo torto)

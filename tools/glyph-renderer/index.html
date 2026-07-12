@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Glyph renderer — tese → glifo</title>
+    <title>Glyph renderer — radial+ / arc</title>
     <link rel="stylesheet" href="./glyph-renderer.css" />
   </head>
   <body>
@@ -11,8 +11,8 @@
       <p class="kicker">tools · glyph-renderer</p>
       <h1 class="title">glyph renderer</h1>
       <p class="note">
-        Cola o JSON da skill <code>glyph</code> e renderiza. Mesh fraco de fundo +
-        arestas das conexões + packets por <code>animacao</code>.
+        Modos <code>radial</code> (núcleo + fluxos nomeados) e <code>arc</code>
+        (jornada U). Cola JSON da skill <code>glyph</code> → render.
       </p>
 
       <div class="layout">
@@ -22,11 +22,14 @@
             id="glyph-json"
             spellcheck="false"
             rows="18"
-            placeholder='{ "metadados": { ... }, "nos": [...], "conexoes": [...] }'
+            placeholder='{ "metadados": { "modo": "radial"| "arc", ... }, "nos": [...], "conexoes": [...] }'
           ></textarea>
           <div class="panel-actions">
             <button type="button" id="btn-render">render</button>
-            <button type="button" id="btn-example" class="ghost">exemplo</button>
+            <button type="button" id="btn-example-radial" class="ghost">
+              radial
+            </button>
+            <button type="button" id="btn-example-arc" class="ghost">arc</button>
           </div>
           <p class="panel-error" id="glyph-error" hidden></p>
         </aside>
@@ -39,9 +42,12 @@
           <div class="glyph-viz-head">
             <span class="label">
               <span class="pulse" aria-hidden="true"></span>
-              <span class="tese" id="glyph-tese">cole um glifo</span>
+              <span class="head-text">
+                <span class="tese" id="glyph-tese">cole um glifo</span>
+                <span class="sub" id="glyph-sub"></span>
+              </span>
             </span>
-            <span class="meta" id="glyph-meta">0 nós · 0 fluxos</span>
+            <span class="meta" id="glyph-meta">—</span>
           </div>
 
           <div class="glyph-viz-canvas" id="glyph-canvas">
@@ -51,12 +57,44 @@
               preserveAspectRatio="xMidYMid meet"
               aria-hidden="true"
             >
+              <defs>
+                <pattern
+                  id="gr-hatch"
+                  width="6"
+                  height="6"
+                  patternUnits="userSpaceOnUse"
+                  patternTransform="rotate(45)"
+                >
+                  <line
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="6"
+                    stroke="#9c9893"
+                    stroke-width="0.6"
+                    opacity="0.35"
+                  />
+                </pattern>
+              </defs>
+              <g id="gr-zones"></g>
               <g id="gr-edges-mesh"></g>
               <g id="gr-edges"></g>
+              <g id="gr-edge-labels"></g>
               <g id="gr-packets"></g>
               <g id="gr-nodes"></g>
               <g id="gr-labels"></g>
             </svg>
+          </div>
+
+          <div class="glyph-narrative" id="glyph-narrative" hidden>
+            <div class="narr-col">
+              <span class="narr-kicker">problema</span>
+              <p id="glyph-problema"></p>
+            </div>
+            <div class="narr-col">
+              <span class="narr-kicker">trabalho</span>
+              <p id="glyph-trabalho"></p>
+            </div>
           </div>
         </aside>
       </div>

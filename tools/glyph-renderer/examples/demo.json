@@ -1,23 +1,66 @@
 {
   "metadados": {
+    "modo": "radial",
+    "titulo": "Glifo Sistêmico",
+    "subtitulo": "Ideia → geometria com núcleo e fluxos nomeados",
     "tese_central": "Toda ideia complexa pode ser mapeada como sistema fechado radial.",
-    "estilo_visual": "dark_minimalist_cyberpunk"
+    "estilo_visual": "dark_minimalist_cyberpunk",
+    "narrativa": {
+      "problema": "Listas e pirâmides escondem interações; o leitor vê partes, não o sistema.",
+      "trabalho": "Coloque a tese no centro. Nomeie cada fluxo. Corte arestas sem significado."
+    }
   },
+  "zonas": [],
   "nos": [
-    { "id": "tese", "label": "tese", "categoria": "nucleo" },
-    { "id": "nos", "label": "nós", "categoria": "estrutura" },
-    { "id": "fluxos", "label": "fluxos", "categoria": "relacao" },
-    { "id": "ritmo", "label": "ritmo", "categoria": "dinamica" },
-    { "id": "canvas", "label": "canvas", "categoria": "geometria" },
-    { "id": "ink", "label": "data-ink", "categoria": "principio" }
+    { "id": "tese", "label": "tese", "papel": "core", "categoria": "nucleo" },
+    { "id": "nos", "label": "nós", "papel": "orbit", "categoria": "estrutura" },
+    { "id": "fluxos", "label": "fluxos", "papel": "orbit", "categoria": "relacao" },
+    { "id": "ritmo", "label": "ritmo", "papel": "orbit", "categoria": "dinamica" },
+    { "id": "canvas", "label": "canvas", "papel": "orbit", "categoria": "geometria" },
+    { "id": "ink", "label": "data-ink", "papel": "orbit", "categoria": "principio" }
   ],
   "conexoes": [
-    { "de": "tese", "para": "nos", "relacionamento": "decompõe", "animacao": "pulso_rapido" },
-    { "de": "nos", "para": "fluxos", "relacionamento": "alimenta", "animacao": "pulso_rapido" },
-    { "de": "fluxos", "para": "ritmo", "relacionamento": "define", "animacao": "fluxo_lento" },
-    { "de": "canvas", "para": "nos", "relacionamento": "contém", "animacao": "fluxo_lento" },
-    { "de": "ink", "para": "fluxos", "relacionamento": "restringe", "animacao": "fluxo_lento" },
-    { "de": "ritmo", "para": "tese", "relacionamento": "vivifica", "animacao": "pulso_rapido" },
-    { "de": "canvas", "para": "ink", "relacionamento": "equilibra" }
+    {
+      "de": "tese",
+      "para": "nos",
+      "relacionamento": "decompõe",
+      "label": "decompõe",
+      "animacao": "pulso_rapido"
+    },
+    {
+      "de": "nos",
+      "para": "fluxos",
+      "relacionamento": "alimenta",
+      "label": "alimenta",
+      "animacao": "pulso_rapido"
+    },
+    {
+      "de": "fluxos",
+      "para": "ritmo",
+      "relacionamento": "define",
+      "label": "define",
+      "animacao": "fluxo_lento"
+    },
+    {
+      "de": "canvas",
+      "para": "nos",
+      "relacionamento": "contém",
+      "label": "contém",
+      "animacao": "fluxo_lento"
+    },
+    {
+      "de": "ink",
+      "para": "fluxos",
+      "relacionamento": "restringe",
+      "label": "corta",
+      "animacao": "fluxo_lento"
+    },
+    {
+      "de": "ritmo",
+      "para": "tese",
+      "relacionamento": "vivifica",
+      "label": "vivifica",
+      "animacao": "pulso_rapido"
+    }
   ]
 }
