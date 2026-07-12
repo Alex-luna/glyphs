@@ -1,6 +1,6 @@
-# Template-simple-v3
+# Glyphs
 
-Kit Cursor Luna Labs para iniciar projetos — **não** inclui app runnable.
+Projeto **Glyphs** — fork de [`template-simple-v3`](https://github.com/Alex-luna/template-simple-v3). Infra Cursor syncada; app ainda não.
 
 ## Princípio
 
@@ -15,10 +15,10 @@ Kit Cursor Luna Labs para iniciar projetos — **não** inclui app runnable.
 | É | Não é |
 |---|--------|
 | Rules, skills base, scripts Git, Docs | `app/`, deploy, produto no ar |
-| Skills: `caveman`, `writing-prds`, `repo-audit`, `write-a-skill`, `handoff` | `ui-ux-pro-max` / `shadcn-ui` no clone (~800KB) |
+| Skills: `caveman`, `writing-prds`, `repo-audit`, `repo-brief`, `compare`, `write-a-skill`, `handoff`, `release`, `starter`, `reset` | `ui-ux-pro-max` / `shadcn-ui` no clone (~800KB) |
 | Notas de design em `Design-System/` | `design-system/` (path antigo v2) |
 
-Repo template: https://github.com/Alex-luna/template-simple-v3 (privado)
+Repo: https://github.com/Alex-luna/glyphs · Template origem: https://github.com/Alex-luna/template-simple-v3
 
 ## Cursor — rules
 
@@ -39,11 +39,16 @@ Repo template: https://github.com/Alex-luna/template-simple-v3 (privado)
 
 ## Skills
 
-Bundled: `caveman`, `writing-prds`, `repo-audit`, `write-a-skill`, `handoff`
+Bundled: `caveman`, `writing-prds`, `repo-audit`, `repo-brief`, `compare`, `write-a-skill`, `handoff`, `release`, `starter`, `reset`
 
 | Skill | Uso |
 |-------|-----|
-| `handoff` | Compacta conversa → doc para próximo agent (OS temp dir; redact secrets) |
+| `repo-brief` | `/brief [rules\|stack\|both] [slug]` — mapa funcional do repo → `Docs/Briefs/brief-{data}-{lens}-{slug}.md` |
+| `compare` | `/compare /path/to/fork` — diff rules/skills/scripts; classifica PORT vs FORK_ONLY → `Docs/Aprendizados do Projeto/compare-{slug}-{data}.md` |
+| `handoff` | Compacta conversa → `Docs/Handoffs/handoff-{data-HH-mm}-{slug}.md` no repo |
+| `release` | `/release` — notas + `release.sh` (não delegar `gh` manual) |
+| `starter` | `/starter` — contrato explícito caveman + ponytail na sessão |
+| `reset` | `/reset` — apaga plans em `.cursor/plans/` e zera `changelogs.md` |
 
 **UI (opcional):**
 
@@ -56,8 +61,10 @@ export SKILLS_SOURCE="$HOME/Documents/Luna-Labs-Cursor/skills-bundle"
 
 | Script | Uso |
 |--------|-----|
-| `commit-push.sh "msg"` | Commit + push |
+| `commit-push.sh "msg"` | Commit + push (hooks: `renumber-plans.sh`, `normalize-prompts.sh`) |
 | `release.sh vX.Y.Z --notes-file releases/...` | Release GitHub |
+| `renumber-plans.sh` | Renumera `.cursor/plans/*.plan.md` (chamado por commit-push) |
+| `normalize-prompts.sh` | Normaliza `Docs/Prompts/` (chamado por commit-push; `--full` legado) |
 | `install-optional-skills.sh` | Copia skills UI de `SKILLS_SOURCE` |
 | `scaffold-easypanel-simple.sh [nome]` | Preset Node/Easypanel na raiz (+ lockfile) |
 | `dev-simple.sh` | Dev local (`server.js` + fallback de porta) |

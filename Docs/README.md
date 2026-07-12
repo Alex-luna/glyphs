@@ -12,6 +12,7 @@
 | Pasta | Para quê | Quem escreve |
 |-------|----------|--------------|
 | [Prompts/](Prompts/) | Prompts reutilizáveis | Você |
+| [Handoffs/](Handoffs/) | Continuidade entre sessões/agent | Você + agent (`handoff`) |
 | [Aprendizados do Projeto/](Aprendizados%20do%20Projeto/) | Lições do projeto | Você + agent |
 
 ## Referência do template

@@ -54,7 +54,7 @@ Template puro vs fork. Presença de `app/`, `server.js`, `app/convex/`, `Docs/Pr
 
 ### 2. Inventário
 
-Rodar `scripts/inventory.sh`. Complementar com leitura de `README.md`, `Docs/FORK.md`, `.cursor/rules/default.mdc`.
+Rodar `./.agents/skills/repo-audit/scripts/inventory.sh`. Complementar com leitura de `README.md`, `Docs/FORK.md`, `.cursor/rules/default.mdc`.
 
 ### 3. Relevância
 
@@ -97,7 +97,7 @@ Aplicar mudanças aprovadas. Template: `./scripts/commit-push.sh` ao fim do batc
 
 | Sinal | Ação típica |
 |-------|-------------|
-| `.cursor/plans/*.plan.md` versionados | DELETE + gitignore |
+| `.cursor/plans/*.plan.md` versionados | KEEP (default) — descomente gitignore se quiser ignorar |
 | Pasta vazia sem referências | DELETE |
 | Rule de stack não usada | DELETE no fork |
 | Skill duplica rule always-on | MERGE → skill thin wrapper |

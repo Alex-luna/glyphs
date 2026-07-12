@@ -4,7 +4,7 @@ Filtro central: **repo serve infra Cursor enxuta + stack escolhida no fork?** Tu
 
 ## Saída
 
-- [ ] Path via `scripts/report-path.sh` → `Docs/Aprendizados do Projeto/raio-x-{dd-MM-aa}.md`
+- [ ] Path via `.agents/skills/repo-audit/scripts/report-path.sh` → `Docs/Aprendizados do Projeto/raio-x-{dd-MM-aa}.md`
 - [ ] Se existir no mesmo dia → sufixo `-2`, `-3`, …
 - [ ] Relatório completo no MD ([REPORT-TEMPLATE.md](REPORT-TEMPLATE.md))
 - [ ] Chat: path + 2–3 bullets — **sem** dump do audit

@@ -16,6 +16,10 @@ Ordem fixa. Apague o que não usar. **Simples sempre vence** — delete rules/do
 | 10 | **App simples no ar?** `./scripts/scaffold-easypanel-simple.sh meu-app` → `Docs/reference/03-easypanel/` → volume `/app/data` no Easypanel |
 | 11 | **Raio-x do repo:** invocar skill `repo-audit` — após init ou periodicamente (prune rules/skills/docs mortos) |
 
+## Manter template atualizado
+
+Fork ativo com melhorias em rules/skills/scripts? No **template**, invocar skill `compare` com path do fork — ex.: `/compare /path/to/meu-fork`. Relatório em `Docs/Aprendizados do Projeto/compare-{slug}-{data}.md`; aplicar só itens **PORT** aprovados.
+
 ## Paths deste template
 
 - Design: `Design-System/` (não `design-system/`)
@@ -27,4 +31,5 @@ Ordem fixa. Apague o que não usar. **Simples sempre vence** — delete rules/do
 
 ## Não levar para o fork
 
-- Histórico de `.cursor/plans/` (ignorado no template; não copiar de outros repos)
+- Histórico de `.cursor/plans/` de **outros** repos (não copiar plans alheios)
+- Para **ignorar** plans no fork (sessão só local): descomente `.cursor/plans/` no `.gitignore`
