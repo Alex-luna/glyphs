@@ -1,5 +1,7 @@
 # Changelogs
 
+(12-07-26 13:15) Release v0.1.0 — primeira versão: template + skill glyph + renderer SVG
+
 (12-07-26 13:05) Pipeline tese → glifo
 - Skill `.agents/skills/glyph/` — tese → JSON sistêmico
 - Renderer `tools/glyph-renderer/` — JSON → SVG radial + packets
