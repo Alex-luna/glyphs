@@ -3,16 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Glyph renderer — radial+ / arc</title>
+    <title>Glyph renderer — radial / arc / venn</title>
     <link rel="stylesheet" href="./glyph-renderer.css" />
   </head>
   <body>
     <div class="shell">
-      <p class="kicker">tools · glyph-renderer</p>
+      <p class="kicker">tools · glyph-renderer · blueprint</p>
       <h1 class="title">glyph renderer</h1>
       <p class="note">
-        Modos <code>radial</code> (núcleo + fluxos nomeados) e <code>arc</code>
-        (jornada U). Cola JSON da skill <code>glyph</code> → render.
+        Modos <code>radial</code>, <code>arc</code>, <code>venn</code>. Cola JSON
+        da skill <code>glyph</code> → render. Estética schematic / blueprint.
       </p>
 
       <div class="layout">
@@ -22,7 +22,7 @@
             id="glyph-json"
             spellcheck="false"
             rows="18"
-            placeholder='{ "metadados": { "modo": "radial"| "arc", ... }, "nos": [...], "conexoes": [...] }'
+            placeholder='{ "metadados": { "modo": "radial"|"arc"|"venn", ... } }'
           ></textarea>
           <div class="panel-actions">
             <button type="button" id="btn-render">render</button>
@@ -30,6 +30,9 @@
               radial
             </button>
             <button type="button" id="btn-example-arc" class="ghost">arc</button>
+            <button type="button" id="btn-example-venn" class="ghost">
+              venn
+            </button>
           </div>
           <p class="panel-error" id="glyph-error" hidden></p>
         </aside>
@@ -75,6 +78,19 @@
                     opacity="0.35"
                   />
                 </pattern>
+                <pattern
+                  id="gr-blueprint-grid"
+                  width="20"
+                  height="20"
+                  patternUnits="userSpaceOnUse"
+                >
+                  <path
+                    d="M 20 0 L 0 0 0 20"
+                    fill="none"
+                    stroke="#2a2926"
+                    stroke-width="0.5"
+                  />
+                </pattern>
                 <marker
                   id="gr-arrow"
                   viewBox="0 0 10 10"
@@ -87,6 +103,7 @@
                   <path d="M 1 1 L 9 5 L 1 9 z" fill="#f2f0ed" />
                 </marker>
               </defs>
+              <g id="gr-blueprint"></g>
               <g id="gr-zones"></g>
               <g id="gr-edges-mesh"></g>
               <g id="gr-edges"></g>
@@ -105,6 +122,10 @@
             <div class="narr-col">
               <span class="narr-kicker">prática</span>
               <p id="glyph-pratica"></p>
+            </div>
+            <div class="narr-col narr-sintese" id="glyph-sintese-col" hidden>
+              <span class="narr-kicker">síntese</span>
+              <p id="glyph-sintese"></p>
             </div>
           </div>
         </aside>

@@ -1,5 +1,9 @@
 # Changelogs
 
+(12-07-26 16:45) Blueprint + venn + alinhamento
+- Grid/cantoneiras; core label no head; edge labels longe do centro
+- Formas nos nós; narrativa.sintese; modo venn (Ikigai) + demo
+
 (12-07-26 16:34) Release v0.3.0 — radial como circuito lógico (spokes, anéis, traços)
 
 (12-07-26 14:00) Radial como circuito lógico

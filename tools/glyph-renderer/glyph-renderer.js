@@ -1,13 +1,13 @@
 /**
- * Glyph renderer — radial+ | arc (Alan Hong–inspired communication).
- * ponytail: vanilla SVG + RAF; no mesh K_n; edge labels carry meaning.
+ * Glyph renderer — radial | arc | venn (blueprint / schematic).
+ * ponytail: vanilla SVG + RAF; clarity > decoration.
  */
 (function glyphRenderer() {
   const DEMO_RADIAL = {
     metadados: {
       modo: "radial",
       titulo: "Glifo Sistêmico",
-      subtitulo: "Circuito: núcleo + spokes + anel de vizinhos",
+      subtitulo: "Circuito: núcleo + spokes + anel",
       tese_central:
         "Toda ideia complexa pode ser mapeada como sistema fechado radial.",
       estilo_visual: "dark_minimalist_cyberpunk",
@@ -16,16 +16,53 @@
           "Listas e pirâmides escondem interações; o leitor vê partes, não o sistema.",
         pratica:
           "Coloque a tese no centro. Spokes nomeados. Anel só entre vizinhos.",
+        sintese: "Núcleo orquestra. Órbita executa. Fluxo tem verbo.",
       },
     },
     zonas: [],
     nos: [
-      { id: "tese", label: "tese", papel: "core", categoria: "nucleo" },
-      { id: "nos", label: "nós", papel: "orbit", categoria: "estrutura" },
-      { id: "fluxos", label: "fluxos", papel: "orbit", categoria: "relacao" },
-      { id: "ritmo", label: "ritmo", papel: "orbit", categoria: "dinamica" },
-      { id: "canvas", label: "canvas", papel: "orbit", categoria: "geometria" },
-      { id: "ink", label: "data-ink", papel: "orbit", categoria: "principio" },
+      {
+        id: "tese",
+        label: "tese",
+        papel: "core",
+        categoria: "nucleo",
+        forma: "circle",
+      },
+      {
+        id: "nos",
+        label: "nós",
+        papel: "orbit",
+        categoria: "estrutura",
+        forma: "square",
+      },
+      {
+        id: "fluxos",
+        label: "fluxos",
+        papel: "orbit",
+        categoria: "relacao",
+        forma: "triangle",
+      },
+      {
+        id: "ritmo",
+        label: "ritmo",
+        papel: "orbit",
+        categoria: "dinamica",
+        forma: "circle",
+      },
+      {
+        id: "canvas",
+        label: "canvas",
+        papel: "orbit",
+        categoria: "geometria",
+        forma: "square",
+      },
+      {
+        id: "ink",
+        label: "data-ink",
+        papel: "orbit",
+        categoria: "principio",
+        forma: "triangle",
+      },
     ],
     conexoes: [
       {
@@ -105,14 +142,15 @@
     metadados: {
       modo: "arc",
       titulo: "Arco de Coerência",
-      subtitulo: "Do automático ao soberano — o preço de se tornar",
+      subtitulo: "Do automático ao soberano",
       tese_central: "Mudança real desce ao oculto antes de emergir de novo.",
       estilo_visual: "dark_minimalist_cyberpunk",
       narrativa: {
         diagnostico:
-          "Tentar mudar só o visível (hábito, output) ignora a ruptura e o trabalho interno.",
+          "Tentar mudar só o visível ignora a ruptura e o trabalho interno.",
         pratica:
-          "Nomeie a descida, o fundo e a subida. Trate o oculto como zona, não como falha.",
+          "Nomeie a descida, o fundo e a subida. Oculto é zona, não falha.",
+        sintese: "Descer → trabalhar → emergir.",
       },
     },
     zonas: [
@@ -126,6 +164,7 @@
         papel: "inicio",
         zona: "visivel",
         ordem: 1,
+        forma: "circle",
       },
       {
         id: "ruptura",
@@ -133,6 +172,7 @@
         papel: "marco",
         zona: "visivel",
         ordem: 2,
+        forma: "triangle",
       },
       {
         id: "dissolucao",
@@ -140,6 +180,7 @@
         papel: "marco",
         zona: "oculto",
         ordem: 3,
+        forma: "square",
       },
       {
         id: "regulacao",
@@ -147,6 +188,7 @@
         papel: "marco",
         zona: "oculto",
         ordem: 4,
+        forma: "square",
       },
       {
         id: "renascimento",
@@ -154,6 +196,7 @@
         papel: "marco",
         zona: "visivel",
         ordem: 5,
+        forma: "triangle",
       },
       {
         id: "soberano",
@@ -161,6 +204,7 @@
         papel: "fim",
         zona: "visivel",
         ordem: 6,
+        forma: "circle",
       },
     ],
     conexoes: [
@@ -202,6 +246,51 @@
     ],
   };
 
+  const DEMO_VENN = {
+    metadados: {
+      modo: "venn",
+      titulo: "Ikigai",
+      subtitulo: "Quatro universos → um propósito",
+      tese_central:
+        "Propósito nasce na interseção do que amo, faço bem, o mundo precisa e paga.",
+      estilo_visual: "dark_minimalist_cyberpunk",
+      narrativa: {
+        diagnostico:
+          "Escolher carreira por um só eixo deixa lacunas.",
+        pratica:
+          "Mapeie os quatro universos. Leia as interseções. Ajuste o centro.",
+        sintese: "Ikigai = amar × bem × mundo × pagamento.",
+      },
+    },
+    universos: [
+      { id: "ama", label: "o que amo" },
+      { id: "mundo", label: "mundo precisa" },
+      { id: "pago", label: "posso cobrar" },
+      { id: "bom", label: "faço bem" },
+    ],
+    intersecoes: [
+      { de: ["ama", "bom"], label: "paixão" },
+      { de: ["ama", "mundo"], label: "missão" },
+      { de: ["mundo", "pago"], label: "vocação" },
+      { de: ["pago", "bom"], label: "profissão" },
+      {
+        de: ["ama", "mundo", "pago"],
+        label: "prazer sem riqueza",
+        callout: true,
+      },
+      {
+        de: ["ama", "bom", "pago"],
+        label: "conforto vazio",
+        callout: true,
+      },
+      {
+        de: ["ama", "bom", "mundo", "pago"],
+        label: "ikigai",
+        papel: "core",
+      },
+    ],
+  };
+
   const ANIM = {
     pulso_rapido: { rate: 110, duration: [500, 800], packetClass: "gr-packet" },
     fluxo_lento: {
@@ -219,9 +308,9 @@
   const LABEL_MAX = 14;
   const EDGE_LABEL_MAX = 12;
   const SVG_NS = "http://www.w3.org/2000/svg";
-
-  // Quadratic U: P0(40,80) P1(200,340) P2(360,80)
   const ARC = { x0: 40, y0: 80, x1: 200, y1: 340, x2: 360, y2: 80, splitY: 175 };
+  const VENN_R = 98;
+  const VENN_OFF = 50;
 
   const $json = document.getElementById("glyph-json");
   const $err = document.getElementById("glyph-error");
@@ -231,6 +320,9 @@
   const $narr = document.getElementById("glyph-narrative");
   const $diagnostico = document.getElementById("glyph-diagnostico");
   const $pratica = document.getElementById("glyph-pratica");
+  const $sintese = document.getElementById("glyph-sintese");
+  const $sinteseCol = document.getElementById("glyph-sintese-col");
+  const $blueprint = document.getElementById("gr-blueprint");
   const $zones = document.getElementById("gr-zones");
   const $mesh = document.getElementById("gr-edges-mesh");
   const $edges = document.getElementById("gr-edges");
@@ -253,11 +345,15 @@
   let mode = "radial";
   let nodes = [];
   let edges = [];
+  let universos = [];
+  let intersecoes = [];
   let arcSamples = [];
   let packets = [];
+  let edgeLabelPts = [];
   let lastSpawn = 0;
   let raf = null;
   let visible = true;
+  let glyphData = null;
 
   function animKey(name) {
     if (name === "pulso_rapido" || name === "fluxo_lento") return name;
@@ -279,6 +375,16 @@
     const full = String(s).toLowerCase();
     if (full.length <= max) return { display: full, full };
     return { display: full.slice(0, max - 1) + "…", full };
+  }
+
+  function resolveForma(spec) {
+    if (spec.forma === "square" || spec.forma === "triangle" || spec.forma === "circle")
+      return spec.forma;
+    if (spec.papel === "core") return "circle";
+    const cat = String(spec.categoria || "").toLowerCase();
+    if (/estrutura|marco|geometria/.test(cat)) return "square";
+    if (/relacao|tens|dinam/.test(cat)) return "triangle";
+    return "circle";
   }
 
   function quadPoint(t) {
@@ -324,6 +430,31 @@
     return { x: last.x, y: last.y, t: last.t };
   }
 
+  function vennCenters(n) {
+    if (n === 2) {
+      return [
+        { x: cx - VENN_OFF, y: cy },
+        { x: cx + VENN_OFF, y: cy },
+      ];
+    }
+    if (n === 3) {
+      return [0, 1, 2].map((i) => {
+        const a = -Math.PI / 2 + (i * 2 * Math.PI) / 3;
+        return {
+          x: cx + VENN_OFF * 1.05 * Math.cos(a),
+          y: cy + VENN_OFF * 1.05 * Math.sin(a),
+        };
+      });
+    }
+    // 4 = Ikigai cardinal: top, right, bottom, left
+    return [
+      { x: cx, y: cy - VENN_OFF },
+      { x: cx + VENN_OFF, y: cy },
+      { x: cx, y: cy + VENN_OFF },
+      { x: cx - VENN_OFF, y: cy },
+    ];
+  }
+
   function parseGlyph(raw) {
     let data;
     try {
@@ -332,15 +463,26 @@
       throw new Error("JSON inválido: " + e.message);
     }
     if (!data || typeof data !== "object") throw new Error("Root deve ser object");
+
+    const meta = data.metadados || {};
+    let modo = "radial";
+    if (meta.modo === "arc") modo = "arc";
+    else if (meta.modo === "venn") modo = "venn";
+    data.metadados = meta;
+    meta.modo = modo;
+
+    if (modo === "venn") {
+      if (!Array.isArray(data.universos) || data.universos.length < 2 || data.universos.length > 4) {
+        throw new Error("venn: universos precisa 2–4 itens");
+      }
+      if (!Array.isArray(data.intersecoes)) data.intersecoes = [];
+      return data;
+    }
+
     if (!Array.isArray(data.nos) || data.nos.length < 4 || data.nos.length > 8) {
       throw new Error("nos: precisa 4–8 itens");
     }
     if (!Array.isArray(data.conexoes)) throw new Error("conexoes: array obrigatório");
-
-    const meta = data.metadados || {};
-    const modo = meta.modo === "arc" ? "arc" : "radial";
-    data.metadados = meta;
-    meta.modo = modo;
 
     const ids = new Set();
     for (const n of data.nos) {
@@ -351,12 +493,8 @@
 
     if (modo === "radial") {
       const cores = data.nos.filter((n) => n.papel === "core");
-      if (cores.length === 0) {
-        // compat: first node becomes core
-        data.nos[0].papel = "core";
-      } else if (cores.length > 1) {
-        throw new Error("radial: exatamente 1 nó com papel core");
-      }
+      if (cores.length === 0) data.nos[0].papel = "core";
+      else if (cores.length > 1) throw new Error("radial: exatamente 1 nó com papel core");
     }
 
     return data;
@@ -367,6 +505,52 @@
     const idToIdx = new Map();
     edges = [];
     arcSamples = [];
+    universos = [];
+    intersecoes = [];
+    edgeLabelPts = [];
+    nodes = [];
+
+    if (mode === "venn") {
+      const n = data.universos.length;
+      const centers = vennCenters(n);
+      universos = data.universos.map((u, i) => {
+        const lab = truncate(u.label, 16);
+        return {
+          id: u.id,
+          label: lab.display,
+          labelFull: lab.full,
+          x: centers[i].x,
+          y: centers[i].y,
+          r: VENN_R,
+        };
+      });
+      const byId = new Map(universos.map((u) => [u.id, u]));
+      intersecoes = (data.intersecoes || []).map((it) => {
+        const ids = it.de || [];
+        const pts = ids.map((id) => byId.get(id)).filter(Boolean);
+        let x = cx;
+        let y = cy;
+        if (pts.length) {
+          x = pts.reduce((s, p) => s + p.x, 0) / pts.length;
+          y = pts.reduce((s, p) => s + p.y, 0) / pts.length;
+        }
+        if (ids.length >= 4 || it.papel === "core") {
+          x = cx;
+          y = cy;
+        }
+        const lab = truncate(it.label || "", ids.length >= 3 ? 18 : 12);
+        return {
+          ids,
+          label: lab.display,
+          labelFull: lab.full,
+          x,
+          y,
+          papel: it.papel || (ids.length >= 4 ? "core" : "lobe"),
+          callout: !!it.callout && ids.length === 3,
+        };
+      });
+      return;
+    }
 
     if (mode === "arc") {
       const sorted = data.nos
@@ -393,13 +577,14 @@
           labelFull: lab.full,
           id: spec.id,
           papel,
+          forma: resolveForma(spec),
+          categoria: spec.categoria || "",
           zona: spec.zona || (p.y > ARC.splitY ? "oculto" : "visivel"),
           arcDist: t * arcSamples.totalLen,
         };
       });
     } else {
-      const coreSpec =
-        data.nos.find((n) => n.papel === "core") || data.nos[0];
+      const coreSpec = data.nos.find((n) => n.papel === "core") || data.nos[0];
       const orbits = data.nos.filter((n) => n.id !== coreSpec.id);
       const labCore = truncate(coreSpec.label, LABEL_MAX);
       nodes = [
@@ -411,6 +596,8 @@
           labelFull: labCore.full,
           id: coreSpec.id,
           papel: "core",
+          forma: resolveForma(coreSpec),
+          categoria: coreSpec.categoria || "",
         },
       ];
       idToIdx.set(coreSpec.id, 0);
@@ -427,11 +614,13 @@
           labelFull: lab.full,
           id: spec.id,
           papel: "orbit",
+          forma: resolveForma(spec),
+          categoria: spec.categoria || "",
         });
       });
     }
 
-    for (const c of data.conexoes) {
+    for (const c of data.conexoes || []) {
       const fi = idToIdx.get(c.de);
       const ti = idToIdx.get(c.para);
       if (fi === undefined || ti === undefined) {
@@ -443,8 +632,7 @@
       const a = nodes[fi];
       const b = nodes[ti];
       const spoke =
-        mode === "radial" &&
-        (a.papel === "core" || b.papel === "core");
+        mode === "radial" && (a.papel === "core" || b.papel === "core");
       edges.push({
         fromIdx: fi,
         toIdx: ti,
@@ -477,7 +665,6 @@
 
   function ringArcSpec(a, b) {
     const d = shortArcDelta(a.angle, b.angle);
-    const large = 0;
     const sweep = d >= 0 ? 1 : 0;
     const path =
       "M " +
@@ -488,9 +675,7 @@
       R +
       " " +
       R +
-      " 0 " +
-      large +
-      " " +
+      " 0 0 " +
       sweep +
       " " +
       b.x +
@@ -520,10 +705,60 @@
     };
   }
 
-  function drawNode(nd) {
+  function drawBlueprintFrame(refText) {
+    clear($blueprint);
+    $blueprint.appendChild(
+      mk("rect", {
+        x: -28,
+        y: -28,
+        width: 456,
+        height: 456,
+        class: "gr-blueprint-grid",
+        fill: "url(#gr-blueprint-grid)",
+      })
+    );
+    const corners = [
+      [-24, -24, 1, 1],
+      [424, -24, -1, 1],
+      [-24, 424, 1, -1],
+      [424, 424, -1, -1],
+    ];
+    for (const [x, y, sx, sy] of corners) {
+      $blueprint.appendChild(
+        mk("path", {
+          d:
+            "M " +
+            (x + 14 * sx) +
+            " " +
+            y +
+            " L " +
+            x +
+            " " +
+            y +
+            " L " +
+            x +
+            " " +
+            (y + 14 * sy),
+          class: "gr-blueprint-corner",
+        })
+      );
+    }
+    const t = mk("text", {
+      x: -20,
+      y: 428,
+      class: "gr-blueprint-ref",
+      "text-anchor": "start",
+    });
+    t.textContent = refText || "REF";
+    $blueprint.appendChild(t);
+  }
+
+  function drawNodeShape(nd) {
     const open = nd.papel === "inicio" || nd.papel === "fim";
     const isCore = nd.papel === "core";
-    const rRing = isCore ? 16 : open ? 9 : 8;
+    const rRing = isCore ? 16 : open ? 9 : 9;
+    const forma = nd.forma || "circle";
+
     if (isCore) {
       $nodes.appendChild(
         mk("circle", {
@@ -534,19 +769,52 @@
         })
       );
     }
-    const ring = mk("circle", {
-      cx: nd.x,
-      cy: nd.y,
-      r: rRing,
-      class: open ? "gr-node-ring open" : "gr-node-ring",
-    });
-    $nodes.appendChild(ring);
-    if (!open) {
+
+    $nodes.appendChild(
+      mk("circle", {
+        cx: nd.x,
+        cy: nd.y,
+        r: rRing,
+        class: open ? "gr-node-ring open" : "gr-node-ring",
+      })
+    );
+
+    if (open) return;
+
+    const s = isCore ? 7 : 5;
+    if (forma === "square") {
+      $nodes.appendChild(
+        mk("rect", {
+          x: nd.x - s,
+          y: nd.y - s,
+          width: s * 2,
+          height: s * 2,
+          class: "gr-node-shape",
+        })
+      );
+    } else if (forma === "triangle") {
+      const h = s * 1.15;
+      const d =
+        "M " +
+        nd.x +
+        " " +
+        (nd.y - h) +
+        " L " +
+        (nd.x + h) +
+        " " +
+        (nd.y + h * 0.7) +
+        " L " +
+        (nd.x - h) +
+        " " +
+        (nd.y + h * 0.7) +
+        " Z";
+      $nodes.appendChild(mk("path", { d: d, class: "gr-node-shape" }));
+    } else {
       $nodes.appendChild(
         mk("circle", {
           cx: nd.x,
           cy: nd.y,
-          r: isCore ? 3.5 : 2,
+          r: isCore ? 3.5 : 2.2,
           class: "gr-node-dot",
         })
       );
@@ -554,6 +822,9 @@
   }
 
   function placeLabel(nd, offset) {
+    // radial core label omitted — title lives in head (avoids spoke collisions)
+    if (mode === "radial" && nd.papel === "core") return;
+
     let lx;
     let ly;
     let anchor = "middle";
@@ -563,12 +834,8 @@
       const gap = below ? offset + 4 : -(offset + 4);
       lx = nd.x;
       ly = nd.y + gap;
-    } else if (nd.papel === "core") {
-      lx = nd.x;
-      ly = nd.y + 40;
-      cls = "gr-node-label core";
     } else {
-      const lr = R + 20;
+      const lr = R + 22;
       lx = cx + lr * Math.cos(nd.angle);
       ly = cy + lr * Math.sin(nd.angle);
       anchor =
@@ -594,14 +861,38 @@
     $labels.appendChild(t);
   }
 
+  function nudgeAwayFromCenter(x, y, minDist) {
+    const dx = x - cx;
+    const dy = y - cy;
+    const d = Math.hypot(dx, dy) || 1;
+    if (d >= minDist) return { x: x, y: y };
+    const s = minDist / d;
+    return { x: cx + dx * s, y: cy + dy * s };
+  }
+
   function placeEdgeLabelAt(mx, my, e) {
     if (!e.label) return;
-    const approxW = Math.max(28, e.label.length * 5.2);
-    const approxH = 11;
+    let x = mx;
+    let y = my;
+    if (mode === "radial") {
+      const p = nudgeAwayFromCenter(x, y, 42);
+      x = p.x;
+      y = p.y;
+      for (const prev of edgeLabelPts) {
+        if (Math.hypot(x - prev.x, y - prev.y) < 16) {
+          x += 8;
+          y -= 8;
+        }
+      }
+      edgeLabelPts.push({ x: x, y: y });
+    }
+
+    const approxW = Math.max(30, e.label.length * 5.4);
+    const approxH = 12;
     $edgeLabels.appendChild(
       mk("rect", {
-        x: mx - approxW / 2,
-        y: my - approxH / 2 - 1,
+        x: x - approxW / 2,
+        y: y - approxH / 2 - 1,
         width: approxW,
         height: approxH,
         class: "gr-edge-halo",
@@ -609,8 +900,8 @@
       })
     );
     const t = mk("text", {
-      x: mx,
-      y: my,
+      x: x,
+      y: y,
       class: "gr-edge-label",
       "text-anchor": "middle",
       "dominant-baseline": "middle",
@@ -629,37 +920,30 @@
 
     if (mode === "radial" && e.kind === "ring") {
       const arc = ringArcSpec(e.a, e.b);
-      const off = 14;
-      placeEdgeLabelAt(arc.midX + arc.outX * off, arc.midY + arc.outY * off, e);
+      placeEdgeLabelAt(arc.midX + arc.outX * 16, arc.midY + arc.outY * 16, e);
       return;
     }
 
     if (mode === "radial" && e.kind === "spoke") {
-      const tAlong = 0.62;
+      const tAlong = 0.55;
       const orbit = e.a.papel === "core" ? e.b : e.a;
       const mx = cx + (orbit.x - cx) * tAlong;
       const my = cy + (orbit.y - cy) * tAlong;
       const fl = Math.hypot(orbit.x - cx, orbit.y - cy) || 1;
       const nx = (orbit.x - cx) / fl;
       const ny = (orbit.y - cy) / fl;
-      // perpendicular offset so label sits beside spoke
-      placeEdgeLabelAt(mx - ny * 12, my + nx * 12, e);
+      placeEdgeLabelAt(mx - ny * 14, my + nx * 14, e);
       return;
     }
 
     const dx = e.b.x - e.a.x;
     const dy = e.b.y - e.a.y;
-    const tAlong = 0.5;
-    const mx0 = e.a.x + dx * tAlong;
-    const my0 = e.a.y + dy * tAlong;
+    const mx0 = e.a.x + dx * 0.5;
+    const my0 = e.a.y + dy * 0.5;
     const toCtrlX = mx0 - ARC.x1;
     const toCtrlY = my0 - ARC.y1;
     const cl = Math.hypot(toCtrlX, toCtrlY) || 1;
-    placeEdgeLabelAt(
-      mx0 + (toCtrlX / cl) * 16,
-      my0 + (toCtrlY / cl) * 16,
-      e
-    );
+    placeEdgeLabelAt(mx0 + (toCtrlX / cl) * 16, my0 + (toCtrlY / cl) * 16, e);
   }
 
   function drawRadial() {
@@ -667,12 +951,7 @@
     clear($mesh);
 
     $zones.appendChild(
-      mk("circle", {
-        cx: cx,
-        cy: cy,
-        r: R,
-        class: "gr-guide-ring",
-      })
+      mk("circle", { cx: cx, cy: cy, r: R, class: "gr-guide-ring" })
     );
     $zones.appendChild(
       mk("circle", {
@@ -686,49 +965,71 @@
     for (const e of edges) {
       const cls = strokeClass(e.relacionamento, e.animKey);
       if (e.kind === "spoke") {
-        const from = e.a;
-        const to = e.b;
-        const insetA = from.papel === "core" ? 18 : 10;
-        const insetB = to.papel === "core" ? 18 : 10;
-        const s = insetSpoke(from, to, insetA, insetB);
-        const line = mk("line", {
-          x1: s.x1,
-          y1: s.y1,
-          x2: s.x2,
-          y2: s.y2,
-          class: cls,
-          "marker-end": "url(#gr-arrow)",
-        });
-        $edges.appendChild(line);
+        const insetA = e.a.papel === "core" ? 18 : 10;
+        const insetB = e.b.papel === "core" ? 18 : 10;
+        const s = insetSpoke(e.a, e.b, insetA, insetB);
+        $edges.appendChild(
+          mk("line", {
+            x1: s.x1,
+            y1: s.y1,
+            x2: s.x2,
+            y2: s.y2,
+            class: cls,
+            "marker-end": "url(#gr-arrow)",
+          })
+        );
       } else {
         const arc = ringArcSpec(e.a, e.b);
-        const path = mk("path", {
-          d: arc.path,
-          class: cls + " ring",
-          "marker-end": "url(#gr-arrow)",
-        });
-        $edges.appendChild(path);
+        $edges.appendChild(
+          mk("path", {
+            d: arc.path,
+            class: cls + " ring",
+            "marker-end": "url(#gr-arrow)",
+          })
+        );
       }
       drawEdgeLabel(e);
     }
 
     for (const nd of nodes) {
-      drawNode(nd);
+      drawNodeShape(nd);
       placeLabel(nd, 16);
     }
   }
 
   function drawArc(data) {
     clear($mesh);
-    const pathD = `M ${ARC.x0} ${ARC.y0} Q ${ARC.x1} ${ARC.y1} ${ARC.x2} ${ARC.y2}`;
+    const pathD =
+      "M " +
+      ARC.x0 +
+      " " +
+      ARC.y0 +
+      " Q " +
+      ARC.x1 +
+      " " +
+      ARC.y1 +
+      " " +
+      ARC.x2 +
+      " " +
+      ARC.y2;
 
-    const hatch = mk("path", {
-      d: `${pathD} L ${ARC.x2} ${ARC.splitY} L ${ARC.x0} ${ARC.splitY} Z`,
-      class: "gr-hatch",
-      fill: "url(#gr-hatch)",
-    });
-    $zones.appendChild(hatch);
-
+    $zones.appendChild(
+      mk("path", {
+        d:
+          pathD +
+          " L " +
+          ARC.x2 +
+          " " +
+          ARC.splitY +
+          " L " +
+          ARC.x0 +
+          " " +
+          ARC.splitY +
+          " Z",
+        class: "gr-hatch",
+        fill: "url(#gr-hatch)",
+      })
+    );
     $zones.appendChild(
       mk("line", {
         x1: 24,
@@ -740,9 +1041,7 @@
     );
 
     const zonas = Array.isArray(data.zonas) ? data.zonas : [];
-    const topZ = zonas.find((z) => z.id === "visivel") || {
-      label: "visível",
-    };
+    const topZ = zonas.find((z) => z.id === "visivel") || { label: "visível" };
     const botZ = zonas.find((z) => z.id === "oculto") || { label: "oculto" };
     const zt = mk("text", {
       x: 28,
@@ -763,14 +1062,119 @@
 
     $edges.appendChild(mk("path", { d: pathD, class: "gr-arc-path" }));
 
-    // path alone = journey; labels only (no faint chords)
-    for (const e of edges) {
-      drawEdgeLabel(e);
+    for (const e of edges) drawEdgeLabel(e);
+    for (const nd of nodes) {
+      drawNodeShape(nd);
+      placeLabel(nd, 16);
+    }
+  }
+
+  function drawVenn() {
+    clear($zones);
+    clear($mesh);
+    clear($edges);
+
+    for (const u of universos) {
+      $zones.appendChild(
+        mk("circle", {
+          cx: u.x,
+          cy: u.y,
+          r: u.r,
+          class: "gr-venn-circle",
+        })
+      );
+      // outer label: push away from canvas center
+      const dx = u.x - cx;
+      const dy = u.y - cy;
+      const d = Math.hypot(dx, dy) || 1;
+      const lx = u.x + (dx / d) * (u.r * 0.55);
+      const ly = u.y + (dy / d) * (u.r * 0.55);
+      const t = mk("text", {
+        x: lx,
+        y: ly,
+        class: "gr-venn-universe",
+        "text-anchor": "middle",
+        "dominant-baseline": "middle",
+      });
+      t.textContent = u.label;
+      $labels.appendChild(t);
     }
 
-    for (const nd of nodes) {
-      drawNode(nd);
-      placeLabel(nd, 16);
+    let calloutIdx = 0;
+    for (const it of intersecoes) {
+      if (it.papel === "core") {
+        $nodes.appendChild(
+          mk("circle", {
+            cx: it.x,
+            cy: it.y,
+            r: 22,
+            class: "gr-node-ring outer pulse",
+          })
+        );
+        $nodes.appendChild(
+          mk("circle", {
+            cx: it.x,
+            cy: it.y,
+            r: 14,
+            class: "gr-venn-core",
+          })
+        );
+        const t = mk("text", {
+          x: it.x,
+          y: it.y,
+          class: "gr-node-label core",
+          "text-anchor": "middle",
+          "dominant-baseline": "middle",
+        });
+        t.textContent = it.label;
+        $labels.appendChild(t);
+        continue;
+      }
+
+      if (it.callout) {
+        const ang = (-Math.PI / 4) + calloutIdx * (Math.PI / 2.2);
+        calloutIdx++;
+        const ox = cx + 168 * Math.cos(ang);
+        const oy = cy + 168 * Math.sin(ang);
+        $edges.appendChild(
+          mk("line", {
+            x1: it.x,
+            y1: it.y,
+            x2: ox,
+            y2: oy,
+            class: "gr-venn-callout-line",
+          })
+        );
+        $nodes.appendChild(
+          mk("circle", {
+            cx: it.x,
+            cy: it.y,
+            r: 2.2,
+            class: "gr-node-dot",
+          })
+        );
+        const t = mk("text", {
+          x: ox,
+          y: oy,
+          class: "gr-venn-callout",
+          "text-anchor": "middle",
+          "dominant-baseline": "middle",
+        });
+        t.textContent = it.label;
+        $labels.appendChild(t);
+        continue;
+      }
+
+      // 2-way lobe
+      const t = mk("text", {
+        x: it.x,
+        y: it.y,
+        class: "gr-venn-lobe",
+        "text-anchor": "middle",
+        "dominant-baseline": "middle",
+      });
+      t.textContent = it.label;
+      $labels.appendChild(t);
     }
   }
 
@@ -783,12 +1187,24 @@
     clear($labels);
     clear($packets);
     packets = [];
+    edgeLabelPts = [];
+
+    const ref =
+      "REF · " +
+      mode +
+      " · " +
+      (mode === "venn"
+        ? universos.length + " univ"
+        : nodes.length + " nós");
+    drawBlueprintFrame(ref);
 
     if (mode === "arc") drawArc(data);
+    else if (mode === "venn") drawVenn();
     else drawRadial();
   }
 
   function spawnPacket(now) {
+    if (mode === "venn") return;
     if (mode === "arc" && arcSamples.length) {
       const cfg = ANIM.default;
       const [durMin, durMax] = cfg.duration;
@@ -818,32 +1234,27 @@
     const e = spokes[Math.floor(Math.random() * spokes.length)];
     const cfg = ANIM[e.animKey] || ANIM.default;
     const [durMin, durMax] = cfg.duration;
-    // follow direction de → para
-    const a = e.a;
-    const b = e.b;
     const dot = mk("circle", {
-      cx: a.x,
-      cy: a.y,
+      cx: e.a.x,
+      cy: e.a.y,
       r: 2.2,
       class: cfg.packetClass,
     });
     $packets.appendChild(dot);
     packets.push({
       kind: "edge",
-      a,
-      b,
+      a: e.a,
+      b: e.b,
       dot,
       start: now,
       duration: durMin + Math.random() * (durMax - durMin) + 200,
-      animKey: e.animKey,
     });
   }
 
   function meanSpawnRate() {
+    if (mode === "venn") return 9999;
     if (mode === "arc") return 280;
-    const spokes = edges.filter((e) => e.kind === "spoke");
-    if (!spokes.length) return 9999;
-    return 320;
+    return edges.some((e) => e.kind === "spoke") ? 320 : 9999;
   }
 
   function tick(now) {
@@ -851,15 +1262,12 @@
       raf = null;
       return;
     }
-
     const rate = meanSpawnRate();
     const cap = mode === "arc" ? 6 : 4;
-
-    if (now - lastSpawn > rate && packets.length < cap) {
+    if (mode !== "venn" && now - lastSpawn > rate && packets.length < cap) {
       spawnPacket(now);
       lastSpawn = now;
     }
-
     for (let k = packets.length - 1; k >= 0; k--) {
       const p = packets[k];
       const t = (now - p.start) / p.duration;
@@ -869,8 +1277,7 @@
         continue;
       }
       if (p.kind === "arc") {
-        const d = p.startDist + p.travel * t;
-        const pt = pointAtArcLength(arcSamples, d);
+        const pt = pointAtArcLength(arcSamples, p.startDist + p.travel * t);
         p.dot.setAttribute("cx", pt.x);
         p.dot.setAttribute("cy", pt.y);
       } else {
@@ -878,7 +1285,6 @@
         p.dot.setAttribute("cy", p.a.y + (p.b.y - p.a.y) * t);
       }
     }
-
     raf = requestAnimationFrame(tick);
   }
 
@@ -890,16 +1296,26 @@
     const n = (meta && meta.narrativa) || {};
     const diagnostico = n.diagnostico || n.problema || "";
     const pratica = n.pratica || n.trabalho || "";
-    if (!diagnostico && !pratica) {
+    const sintese = n.sintese || "";
+    if (!diagnostico && !pratica && !sintese) {
       $narr.hidden = true;
       return;
     }
     $narr.hidden = false;
+    $narr.classList.toggle("has-sintese", !!sintese);
     $diagnostico.textContent = diagnostico;
     $pratica.textContent = pratica;
+    if (sintese) {
+      $sinteseCol.hidden = false;
+      $sintese.textContent = sintese;
+    } else {
+      $sinteseCol.hidden = true;
+      $sintese.textContent = "";
+    }
   }
 
   function render(data) {
+    glyphData = data;
     buildLayout(data);
     drawStatic(data);
     const meta = data.metadados || {};
@@ -907,15 +1323,20 @@
     $tese.textContent = title;
     $tese.title = meta.tese_central || title;
     $sub.textContent = meta.subtitulo || "";
-    $meta.textContent =
-      meta.modo + " · " + nodes.length + " nós · " + edges.length + " fluxos";
+    if (mode === "venn") {
+      $meta.textContent =
+        "venn · " +
+        universos.length +
+        " univ · " +
+        intersecoes.length +
+        " cruz";
+    } else {
+      $meta.textContent =
+        meta.modo + " · " + nodes.length + " nós · " + edges.length + " fluxos";
+    }
     setNarrative(meta);
     showError("");
-    console.log("glyph-renderer render", {
-      modo: mode,
-      nos: nodes.length,
-      conexoes: edges.length,
-    });
+    console.log("glyph-renderer render", { modo: mode });
     ensureLoop();
   }
 
@@ -942,6 +1363,9 @@
   document
     .getElementById("btn-example-arc")
     .addEventListener("click", () => loadDemo(DEMO_ARC, "arc"));
+  document
+    .getElementById("btn-example-venn")
+    .addEventListener("click", () => loadDemo(DEMO_VENN, "venn"));
 
   const io = new IntersectionObserver(
     (entries) => {

@@ -1,0 +1,41 @@
+{
+  "metadados": {
+    "modo": "venn",
+    "titulo": "Ikigai",
+    "subtitulo": "Quatro universos → um propósito",
+    "tese_central": "Propósito nasce na interseção do que amo, faço bem, o mundo precisa e paga.",
+    "estilo_visual": "dark_minimalist_cyberpunk",
+    "narrativa": {
+      "diagnostico": "Escolher carreira por um só eixo (amor, dinheiro, talento ou demanda) deixa lacunas.",
+      "pratica": "Mapeie os quatro universos. Leia as interseções. Ajuste até o centro ficar coerente.",
+      "sintese": "Ikigai = amar × bem × mundo × pagamento."
+    }
+  },
+  "universos": [
+    { "id": "ama", "label": "o que amo" },
+    { "id": "mundo", "label": "mundo precisa" },
+    { "id": "pago", "label": "posso cobrar" },
+    { "id": "bom", "label": "faço bem" }
+  ],
+  "intersecoes": [
+    { "de": ["ama", "bom"], "label": "paixão" },
+    { "de": ["ama", "mundo"], "label": "missão" },
+    { "de": ["mundo", "pago"], "label": "vocação" },
+    { "de": ["pago", "bom"], "label": "profissão" },
+    {
+      "de": ["ama", "mundo", "pago"],
+      "label": "prazer sem riqueza",
+      "callout": true
+    },
+    {
+      "de": ["ama", "bom", "pago"],
+      "label": "conforto vazio",
+      "callout": true
+    },
+    {
+      "de": ["ama", "bom", "mundo", "pago"],
+      "label": "ikigai",
+      "papel": "core"
+    }
+  ]
+}
