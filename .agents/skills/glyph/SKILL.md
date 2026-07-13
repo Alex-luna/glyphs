@@ -49,28 +49,32 @@ Edge `label` required (verb ≤12 chars). Node labels ≤14 chars. 4–8 nodes.
 
 ### Story grammar (radial)
 
-Forma = papel na narrativa. **Nunca** silhueta aleatória.
+Não peça `circle`/`square`/`triangle` ao user. Atribua **`papel_semantico`**; o renderer mapeia a forma.
 
-| Forma | Significado | Orientação |
-|-------|-------------|------------|
-| `circle` | estado / presença estável | n/a (core quase sempre circle) |
-| `square` | estrutura / contêiner | eixo alinhado |
-| `triangle` | força / direção / tensão | ápice aponta outflow |
+| `papel_semantico` | Forma | Significado |
+|-------------------|-------|-------------|
+| `estado` | `circle` | presença estável / combustível / âncora vivida |
+| `motor` | `square` | estrutura que transforma / negócio / contêiner |
+| `fluxo` | `triangle` | força direcional no ciclo; ápice = outflow |
 
-Outflow do triângulo (render deriva; skill controla):
+Outflow do triângulo (render deriva; skill pode override):
 
 1. `apontar: "<id>"` — override explícito
-2. Senão: primeira conexão `de: esteNó` (ordem no JSON = prioridade)
+2. Senão: edge ring com `pulso_rapido`, senão primeira conexão `de`
 3. Senão (só inbound): aponta para longe do core no spoke
+
+Se `papel_semantico` e `forma` ausentes e o anel fecha, o renderer infere do grafo (out-degree / verbos). Skill prefere declarar o papel.
 
 Geometria interna (`gr-story`) nasce do grafo — não inventar eixos órfãos:
 
 - chevrons no anel no sentido `de→para`
-- triângulo de enquadramento se ≥3 órbitas de tensão (`forma: triangle` ou categoria `relacao|tens|dinam`)
-- ticks N/E/S/W só se o anel fecha (ciclo vizinho a vizinho)
+- triângulo de enquadramento se ≥3 órbitas de tensão (`fluxo` / triangle)
+- ticks N/E/S/W só se o anel fecha
 
 ```json
-{ "id": "fluxos", "label": "fluxos", "papel": "orbit", "forma": "triangle", "apontar": "ritmo", "categoria": "relacao" }
+{ "id": "lifestyle", "label": "lifestyle", "papel": "orbit", "papel_semantico": "estado" },
+{ "id": "negocio", "label": "negócio", "papel": "orbit", "papel_semantico": "motor" },
+{ "id": "produto", "label": "produto", "papel": "orbit", "papel_semantico": "fluxo", "apontar": "lifestyle" }
 ```
 
 ## Mode `arc`
@@ -103,6 +107,6 @@ Sequential connections.
 ## Renderer
 
 [`tools/glyph-renderer/`](../../../tools/glyph-renderer/)  
-Demos: `demo.json`, `demo-arc.json`, `demo-venn.json`.
+Demos: `demo.json`, `demo-arc.json`, `demo-venn.json`, `demo-economia.json`.
 
 Refs: Alan Hong + Batch Ikigai — communication density, not pixel copy.

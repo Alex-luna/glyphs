@@ -1,0 +1,29 @@
+{
+    "metadados": {
+      "modo": "radial",
+      "titulo": "Economia Invertida",
+      "subtitulo": "negócio ↔ lifestyle, sem início nem fim",
+      "tese_central": "Lifestyle não é prêmio do negócio — é combustível dele; o produto financia a vida que o alimenta.",
+      "estilo_visual": "dark_minimalist_cyberpunk",
+      "narrativa": {
+        "diagnostico": "O mito separa trabalho e vida: trabalhar para viver, ou viver para trabalhar — lifestyle vira recompensa atrasada.",
+        "pratica": "Viver de forma que o viver alimente o sistema: a vida construída é o produto; o produto financia a vida.",
+        "sintese": "Simbiose sem ponta: lifestyle alimenta o negócio que devolve liberdade."
+      }
+    },
+    "zonas": [],
+    "nos": [
+      { "id": "liberdade", "label": "liberdade", "papel": "core", "categoria": "nucleo", "forma": "circle" },
+      { "id": "lifestyle", "label": "lifestyle", "papel": "orbit", "categoria": "estado", "forma": "circle" },
+      { "id": "negocio", "label": "negócio", "papel": "orbit", "categoria": "estrutura", "forma": "square" },
+      { "id": "produto", "label": "produto", "papel": "orbit", "categoria": "dinamica", "forma": "triangle", "apontar": "lifestyle" }
+    ],
+    "conexoes": [
+      { "de": "liberdade", "para": "lifestyle", "relacionamento": "ancora", "label": "ancora", "animacao": "fluxo_lento" },
+      { "de": "liberdade", "para": "negocio", "relacionamento": "ancora", "label": "ancora", "animacao": "fluxo_lento" },
+      { "de": "liberdade", "para": "produto", "relacionamento": "ancora", "label": "ancora", "animacao": "fluxo_lento" },
+      { "de": "lifestyle", "para": "negocio", "relacionamento": "alimenta", "label": "alimenta", "animacao": "pulso_rapido" },
+      { "de": "negocio", "para": "produto", "relacionamento": "gera", "label": "gera", "animacao": "pulso_rapido" },
+      { "de": "produto", "para": "lifestyle", "relacionamento": "financia", "label": "financia", "animacao": "flujo_lento" }
+    ]
+  }

@@ -291,6 +291,92 @@
     ],
   };
 
+  const DEMO_ECONOMIA = {
+    metadados: {
+      modo: "radial",
+      titulo: "Economia Invertida",
+      subtitulo: "negócio ↔ lifestyle, sem início nem fim",
+      tese_central:
+        "Lifestyle não é prêmio do negócio — é combustível dele; o produto financia a vida que o alimenta.",
+      estilo_visual: "dark_minimalist_cyberpunk",
+      narrativa: {
+        diagnostico:
+          "O mito separa trabalho e vida: trabalhar para viver, ou viver para trabalhar — lifestyle vira recompensa atrasada.",
+        pratica:
+          "Viver de forma que o viver alimente o sistema: a vida construída é o produto; o produto financia a vida.",
+        sintese:
+          "Simbiose sem ponta: lifestyle alimenta o negócio que devolve liberdade.",
+      },
+    },
+    zonas: [],
+    nos: [
+      { id: "liberdade", label: "liberdade", papel: "core", categoria: "nucleo" },
+      {
+        id: "lifestyle",
+        label: "lifestyle",
+        papel: "orbit",
+        papel_semantico: "estado",
+      },
+      {
+        id: "negocio",
+        label: "negócio",
+        papel: "orbit",
+        papel_semantico: "motor",
+      },
+      {
+        id: "produto",
+        label: "produto",
+        papel: "orbit",
+        papel_semantico: "fluxo",
+        apontar: "lifestyle",
+      },
+    ],
+    conexoes: [
+      {
+        de: "liberdade",
+        para: "lifestyle",
+        relacionamento: "ancora",
+        label: "ancora",
+        animacao: "fluxo_lento",
+      },
+      {
+        de: "liberdade",
+        para: "negocio",
+        relacionamento: "ancora",
+        label: "ancora",
+        animacao: "fluxo_lento",
+      },
+      {
+        de: "liberdade",
+        para: "produto",
+        relacionamento: "ancora",
+        label: "ancora",
+        animacao: "fluxo_lento",
+      },
+      {
+        de: "lifestyle",
+        para: "negocio",
+        relacionamento: "alimenta",
+        label: "alimenta",
+        animacao: "pulso_rapido",
+      },
+      {
+        de: "negocio",
+        para: "produto",
+        relacionamento: "gera",
+        label: "gera",
+        animacao: "pulso_rapido",
+      },
+      {
+        de: "produto",
+        para: "lifestyle",
+        relacionamento: "financia",
+        label: "financia",
+        animacao: "fluxo_lento",
+      },
+    ],
+  };
+
   const ANIM = {
     pulso_rapido: { rate: 110, duration: [500, 800], packetClass: "gr-packet" },
     fluxo_lento: {
@@ -357,6 +443,7 @@
   let glyphData = null;
 
   function animKey(name) {
+    if (name === "flujo_lento") return "fluxo_lento"; // typo alias
     if (name === "pulso_rapido" || name === "fluxo_lento") return name;
     return "default";
   }
@@ -378,18 +465,41 @@
     return { display: full.slice(0, max - 1) + "…", full };
   }
 
-  function resolveForma(spec) {
-    if (spec.forma === "square" || spec.forma === "triangle" || spec.forma === "circle")
-      return spec.forma;
-    if (spec.papel === "core") return "circle";
+  function formaFromPapelSemantico(ps) {
+    const k = String(ps || "").toLowerCase();
+    if (k === "estado") return "circle";
+    if (k === "motor") return "square";
+    if (k === "fluxo") return "triangle";
+    return null;
+  }
+
+  function formaFromCategoria(spec) {
     const cat = String(spec.categoria || "").toLowerCase();
     if (/estrutura|marco|geometria/.test(cat)) return "square";
     if (/relacao|tens|dinam/.test(cat)) return "triangle";
     return "circle";
   }
 
+  function resolveForma(spec) {
+    if (spec.forma === "square" || spec.forma === "triangle" || spec.forma === "circle")
+      return spec.forma;
+    const fromPs = formaFromPapelSemantico(spec.papel_semantico);
+    if (fromPs) return fromPs;
+    if (spec.papel === "core") return "circle";
+    return null; // pending graph inference or categoria
+  }
+
+  function shouldInferForma(spec) {
+    if (spec.forma === "square" || spec.forma === "triangle" || spec.forma === "circle")
+      return false;
+    if (formaFromPapelSemantico(spec.papel_semantico)) return false;
+    if (spec.papel === "core") return false;
+    return true;
+  }
+
   function isTensionNode(nd) {
     if (nd.forma === "triangle") return true;
+    if (nd.papel_semantico === "fluxo") return true;
     return /relacao|tens|dinam/.test(String(nd.categoria || "").toLowerCase());
   }
 
@@ -399,9 +509,12 @@
       const t = nodes.find((n) => n.id === nd.apontar);
       if (t) return t;
     }
+    const ringPulse = edges.find(
+      (e) => e.a.id === nd.id && e.kind === "ring" && e.animKey === "pulso_rapido"
+    );
+    if (ringPulse) return ringPulse.b;
     const out = edges.find((e) => e.a.id === nd.id);
     if (out) return out.b;
-    // only inbound: force away from core along spoke
     const a = nd.angle != null ? nd.angle : Math.atan2(nd.y - cy, nd.x - cx);
     return { x: cx + Math.cos(a) * (R + 40), y: cy + Math.sin(a) * (R + 40) };
   }
@@ -607,8 +720,13 @@
           categoria: spec.categoria || "",
           zona: spec.zona || (p.y > ARC.splitY ? "oculto" : "visivel"),
           arcDist: t * arcSamples.totalLen,
+          papel_semantico: spec.papel_semantico || null,
+          inferForma: shouldInferForma(spec),
         };
       });
+      for (const nd of nodes) {
+        if (!nd.forma) nd.forma = formaFromCategoria(nd);
+      }
     } else {
       const coreSpec = data.nos.find((n) => n.papel === "core") || data.nos[0];
       const orbits = data.nos.filter((n) => n.id !== coreSpec.id);
@@ -622,9 +740,11 @@
           labelFull: labCore.full,
           id: coreSpec.id,
           papel: "core",
-          forma: resolveForma(coreSpec),
+          forma: resolveForma(coreSpec) || "circle",
           categoria: coreSpec.categoria || "",
           apontar: coreSpec.apontar || null,
+          papel_semantico: coreSpec.papel_semantico || null,
+          inferForma: false,
         },
       ];
       idToIdx.set(coreSpec.id, 0);
@@ -644,6 +764,8 @@
           forma: resolveForma(spec),
           categoria: spec.categoria || "",
           apontar: spec.apontar || null,
+          papel_semantico: spec.papel_semantico || null,
+          inferForma: shouldInferForma(spec),
         });
       });
     }
@@ -672,6 +794,69 @@
         label: elab.display,
         labelFull: elab.full,
       });
+    }
+
+    if (mode === "radial") applyRadialFormaInference();
+  }
+
+  function applyRadialFormaInference() {
+    const pending = nodes.filter((n) => n.inferForma && n.papel === "orbit");
+    if (!pending.length) return;
+
+    if (!hasClosedRingCycle()) {
+      for (const n of pending) {
+        n.forma = formaFromCategoria(n);
+        n.inferForma = false;
+      }
+      return;
+    }
+
+    const ringOuts = (nd) =>
+      edges.filter((e) => e.kind === "ring" && e.a.id === nd.id);
+
+    let fluxoNode = null;
+    let best = -1;
+    for (const n of pending) {
+      const outs = ringOuts(n);
+      const score =
+        outs.length +
+        outs.filter((e) => e.animKey === "pulso_rapido").length * 10;
+      if (score > best) {
+        best = score;
+        fluxoNode = n;
+      }
+    }
+    if (fluxoNode && best > 0) {
+      fluxoNode.forma = "triangle";
+      fluxoNode.papel_semantico = fluxoNode.papel_semantico || "fluxo";
+      if (!fluxoNode.apontar) {
+        const outs = ringOuts(fluxoNode);
+        const pulse = outs.find((e) => e.animKey === "pulso_rapido");
+        const pick = pulse || outs[0];
+        if (pick) fluxoNode.apontar = pick.b.id;
+      }
+      fluxoNode.inferForma = false;
+    }
+
+    for (const n of pending) {
+      if (n.forma) {
+        n.inferForma = false;
+        continue;
+      }
+      const outs = ringOuts(n);
+      const motor = outs.some((e) =>
+        /gera|decomp[oõ]e|cont[eé]m/.test(
+          String(e.relacionamento || e.label || "").toLowerCase()
+        )
+      );
+      if (motor) {
+        n.forma = "square";
+        n.papel_semantico = n.papel_semantico || "motor";
+      } else {
+        n.forma = "circle";
+        n.papel_semantico = n.papel_semantico || "estado";
+      }
+      n.inferForma = false;
     }
   }
 
@@ -905,18 +1090,17 @@
     return { x: cx + dx * s, y: cy + dy * s };
   }
 
-  function placeEdgeLabelAt(mx, my, e) {
+  function placeEdgeLabelAt(mx, my, e, tangent) {
     if (!e.label) return;
     let x = mx;
     let y = my;
+    const tx = (tangent && tangent.x) || 0;
+    const ty = (tangent && tangent.y) || 0;
     if (mode === "radial") {
-      const p = nudgeAwayFromCenter(x, y, 42);
-      x = p.x;
-      y = p.y;
       for (const prev of edgeLabelPts) {
         if (Math.hypot(x - prev.x, y - prev.y) < 16) {
-          x += 8;
-          y -= 8;
+          x += tx * 6;
+          y += ty * 6;
         }
       }
       edgeLabelPts.push({ x: x, y: y });
@@ -955,19 +1139,36 @@
 
     if (mode === "radial" && e.kind === "ring") {
       const arc = ringArcSpec(e.a, e.b);
-      placeEdgeLabelAt(arc.midX + arc.outX * 16, arc.midY + arc.outY * 16, e);
+      const out = R * 0.14;
+      const d = shortArcDelta(e.a.angle, e.b.angle);
+      const sign = d >= 0 ? 1 : -1;
+      const mid = e.a.angle + d / 2;
+      const tangent = {
+        x: -Math.sin(mid) * sign,
+        y: Math.cos(mid) * sign,
+      };
+      placeEdgeLabelAt(
+        arc.midX + arc.outX * out,
+        arc.midY + arc.outY * out,
+        e,
+        tangent
+      );
       return;
     }
 
     if (mode === "radial" && e.kind === "spoke") {
-      const tAlong = 0.55;
+      const SPOKE_LABEL_R = 42;
+      const PERP = 14;
       const orbit = e.a.papel === "core" ? e.b : e.a;
-      const mx = cx + (orbit.x - cx) * tAlong;
-      const my = cy + (orbit.y - cy) * tAlong;
       const fl = Math.hypot(orbit.x - cx, orbit.y - cy) || 1;
       const nx = (orbit.x - cx) / fl;
       const ny = (orbit.y - cy) / fl;
-      placeEdgeLabelAt(mx - ny * 14, my + nx * 14, e);
+      // left of outbound spoke (CCW) — same rule every spoke → symmetry
+      const px = -ny;
+      const py = nx;
+      const mx = cx + nx * SPOKE_LABEL_R + px * PERP;
+      const my = cy + ny * SPOKE_LABEL_R + py * PERP;
+      placeEdgeLabelAt(mx, my, e, { x: nx, y: ny });
       return;
     }
 
@@ -1338,6 +1539,24 @@
     }
   }
 
+  function radialFormaLegend() {
+    const order = ["estado", "motor", "fluxo"];
+    const sym = { estado: "○", motor: "□", fluxo: "△" };
+    const found = new Set();
+    for (const n of nodes) {
+      if (n.papel === "core") continue;
+      let ps = n.papel_semantico;
+      if (!ps) {
+        if (n.forma === "triangle") ps = "fluxo";
+        else if (n.forma === "square") ps = "motor";
+        else ps = "estado";
+      }
+      found.add(ps);
+    }
+    const parts = order.filter((k) => found.has(k)).map((k) => sym[k] + k);
+    return parts.length ? " · " + parts.join(" ") : "";
+  }
+
   function drawStatic(data) {
     clear($zones);
     clear($mesh);
@@ -1356,7 +1575,8 @@
       " · " +
       (mode === "venn"
         ? universos.length + " univ"
-        : nodes.length + " nós");
+        : nodes.length + " nós") +
+      (mode === "radial" ? radialFormaLegend() : "");
     drawBlueprintFrame(ref);
 
     if (mode === "arc") drawArc(data);
@@ -1463,7 +1683,6 @@
       return;
     }
     $narr.hidden = false;
-    $narr.classList.toggle("has-sintese", !!sintese);
     $diagnostico.textContent = diagnostico;
     $pratica.textContent = pratica;
     if (sintese) {
@@ -1527,6 +1746,9 @@
   document
     .getElementById("btn-example-venn")
     .addEventListener("click", () => loadDemo(DEMO_VENN, "venn"));
+  document
+    .getElementById("btn-example-economia")
+    .addEventListener("click", () => loadDemo(DEMO_ECONOMIA, "economia"));
 
   const io = new IntersectionObserver(
     (entries) => {
