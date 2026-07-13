@@ -1,5 +1,10 @@
 # Changelogs
 
+(12-07-26 21:11) Polish radial — labels, papel_semantico, síntese
+- Edge labels simétricos (raio/tangente); alias `flujo_lento`
+- `papel_semantico` estado/motor/fluxo → ○□△; REF legenda; demo economia
+- Síntese em row full-width abaixo de diagnóstico/prática
+
 (12-07-26 17:18) Release v0.5.0 — storytelling geométrico radial (triângulo+gr-story)
 
 (12-07-26 17:17) Storytelling geométrico radial
