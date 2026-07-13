@@ -1,5 +1,10 @@
 # Changelogs
 
+(13-07-26 08:17) Constituição do glifo + audit A+C
+- Leis universais em `constituicao-glifo.md`; skill aponta pra elas
+- Arc: arestas com seta + papel_semantico; demos radial/arc sem `forma` solta
+- Aprendizado: caso de teste ≠ regra do sistema
+
 (12-07-26 21:11) Polish radial — labels, papel_semantico, síntese
 - Edge labels simétricos (raio/tangente); alias `flujo_lento`
 - `papel_semantico` estado/motor/fluxo → ○□△; REF legenda; demo economia

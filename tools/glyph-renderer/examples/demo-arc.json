@@ -22,7 +22,7 @@
       "papel": "inicio",
       "zona": "visivel",
       "ordem": 1,
-      "categoria": "marco"
+      "papel_semantico": "estado"
     },
     {
       "id": "ruptura",
@@ -30,7 +30,8 @@
       "papel": "marco",
       "zona": "visivel",
       "ordem": 2,
-      "categoria": "marco"
+      "papel_semantico": "fluxo",
+      "apontar": "dissolucao"
     },
     {
       "id": "dissolucao",
@@ -38,7 +39,8 @@
       "papel": "marco",
       "zona": "oculto",
       "ordem": 3,
-      "categoria": "marco"
+      "papel_semantico": "fluxo",
+      "apontar": "regulacao"
     },
     {
       "id": "regulacao",
@@ -46,7 +48,7 @@
       "papel": "marco",
       "zona": "oculto",
       "ordem": 4,
-      "categoria": "marco"
+      "papel_semantico": "motor"
     },
     {
       "id": "renascimento",
@@ -54,7 +56,8 @@
       "papel": "marco",
       "zona": "visivel",
       "ordem": 5,
-      "categoria": "marco"
+      "papel_semantico": "fluxo",
+      "apontar": "soberano"
     },
     {
       "id": "soberano",
@@ -62,7 +65,7 @@
       "papel": "fim",
       "zona": "visivel",
       "ordem": 6,
-      "categoria": "marco"
+      "papel_semantico": "estado"
     }
   ],
   "conexoes": [

@@ -9,23 +9,25 @@ description: >
 
 # Glyph — tese → JSON (radial | arc | venn)
 
-You are a Visual Systems Engineer and Graphic Epistemologist. Convert a thesis
-into a glyph that **explains**.
+You are a Visual Systems Engineer. Convert a thesis into a glyph that
+**explains**. Obey the constitution first — not a single demo thesis.
+
+**Constituição (leis):** [`Docs/Glyphs-Project Reference/constituicao-glifo.md`](../../../Docs/Glyphs-Project%20Reference/constituicao-glifo.md)
 
 ## Choose mode
 
-| Modo | Quando |
-|------|--------|
-| `radial` | Sistema / ciclo / órbita em torno de um núcleo |
-| `arc` | Processo, jornada, transformação, “do X ao Y” |
-| `venn` | Interseção de 2–4 universos / propósito / overlap (Ikigai) |
+| Modo | Quando | Olho lê |
+|------|--------|---------|
+| `radial` | Sistema / ciclo / órbita em torno de um núcleo | core → spokes → anel |
+| `arc` | Processo, jornada, “do X ao Y” | início → marcos → fim (zona = significado) |
+| `venn` | Interseção de 2–4 universos / propósito | lóbulos → pares → core |
 
 ## Workflow
 
-1. Pick `modo`.
+1. Pick `modo` by metaphor (table above) — not by taste.
 2. `titulo` + `subtitulo` + `tese_central`.
-3. `narrativa.diagnostico` + `narrativa.pratica` + `narrativa.sintese` (1 frase-mensagem).
-4. Build geometry for that mode.
+3. `narrativa.diagnostico` + `narrativa.pratica` + `narrativa.sintese` (frase que o olho leva).
+4. Build geometry that obeys the seven laws.
 5. Output **ONLY** JSON.
 6. Point user to `tools/glyph-renderer/index.html`.
 
@@ -41,46 +43,33 @@ into a glyph that **explains**.
 
 `estilo_visual`: `dark_minimalist_cyberpunk` unless asked otherwise.
 
-## Mode `radial`
+## Papel semântico (todos os modos que têm nós)
 
-Star + ring neighbors. One `papel: "core"`. Orbits `papel: "orbit"`.
-Max 5 spokes; orbit–orbit only between ring neighbors.
-Edge `label` required (verb ≤12 chars). Node labels ≤14 chars. 4–8 nodes.
-
-### Story grammar (radial)
-
-Não peça `circle`/`square`/`triangle` ao user. Atribua **`papel_semantico`**; o renderer mapeia a forma.
+Não peça `circle` / `square` / `triangle` ao user. Atribua **`papel_semantico`**:
 
 | `papel_semantico` | Forma | Significado |
 |-------------------|-------|-------------|
-| `estado` | `circle` | presença estável / combustível / âncora vivida |
-| `motor` | `square` | estrutura que transforma / negócio / contêiner |
-| `fluxo` | `triangle` | força direcional no ciclo; ápice = outflow |
+| `estado` | ○ | presença estável / combustível / âncora |
+| `motor` | □ | estrutura que transforma / contêiner |
+| `fluxo` | △ | força; ápice aponta outflow (`apontar` ou 1ª conexão `de`) |
 
-Outflow do triângulo (render deriva; skill pode override):
+Triângulo sem direção = bug. Core radial quase sempre `estado` (circle).
 
-1. `apontar: "<id>"` — override explícito
-2. Senão: edge ring com `pulso_rapido`, senão primeira conexão `de`
-3. Senão (só inbound): aponta para longe do core no spoke
+## Mode `radial`
 
-Se `papel_semantico` e `forma` ausentes e o anel fecha, o renderer infere do grafo (out-degree / verbos). Skill prefere declarar o papel.
+One `papel: "core"`. Orbits `papel: "orbit"`. Max 5 spokes. Orbit–orbit só entre vizinhos do anel. Edge `label` = verbo ≤12 chars. Labels de nó ≤14. 4–8 nós.
 
-Geometria interna (`gr-story`) nasce do grafo — não inventar eixos órfãos:
-
-- chevrons no anel no sentido `de→para`
-- triângulo de enquadramento se ≥3 órbitas de tensão (`fluxo` / triangle)
-- ticks N/E/S/W só se o anel fecha
-
-```json
-{ "id": "lifestyle", "label": "lifestyle", "papel": "orbit", "papel_semantico": "estado" },
-{ "id": "negocio", "label": "negócio", "papel": "orbit", "papel_semantico": "motor" },
-{ "id": "produto", "label": "produto", "papel": "orbit", "papel_semantico": "fluxo", "apontar": "lifestyle" }
-```
+- Declare `papel_semantico` em órbitas (ou deixe o renderer inferir se o anel fecha).
+- Geometria interna nasce do grafo (chevrons, framing, ticks) — sem eixos inventados.
 
 ## Mode `arc`
 
-`zonas` visível/oculto. Nodes with `ordem`, papéis `inicio`/`marco`/`fim`.
-Sequential connections.
+Jornada. `zonas` visível/oculto. Nós com `ordem`, papéis `inicio` / `marco` / `fim`.
+
+- Posição na zona = significado (acima = visível, abaixo = oculto).
+- Conexões **sequenciais** com verbo em cada passo (desce / trabalha / sobe…).
+- `inicio`/`fim` = portões (anel aberto). Marcos usam `papel_semantico` quando a história pede motor/fluxo.
+- Olho: esquerda→direita ao longo do arco; fundo = trabalho interno.
 
 ## Mode `venn`
 
@@ -93,20 +82,28 @@ Sequential connections.
   ],
   "intersecoes": [
     { "de": ["ama", "bom"], "label": "paixão" },
-    { "de": ["ama", "bom"], "label": "callout 3-way", "callout": true },
+    { "de": ["ama", "bom", "mundo"], "label": "callout", "callout": true },
     { "de": ["ama", "bom", "mundo", "pago"], "label": "ikigai", "papel": "core" }
   ]
 }
 ```
 
 - 2–4 `universos` (labels curtos).
-- `intersecoes` with `de: [ids…]`.
-- Pair lobes = 2 ids. Triple callouts = 3 ids + `"callout": true` (máx 4).
-- Full overlap = all ids + `"papel": "core"`.
+- Pares = 2 ids. Callouts 3-way = `"callout": true` (máx 4).
+- Full overlap = todos os ids + `"papel": "core"` — **destino do olho**.
+- Sem arestas: a história é overlap + labels. Não inventar setas órfãs.
+
+## Checklist (antes de entregar JSON)
+
+- [ ] Leis da constituição aplicadas
+- [ ] Papel semântico (não silhueta solta)
+- [ ] Verbos nas arestas (radial/arc)
+- [ ] Direção do fluxo coerente com a tese
+- [ ] Síntese = 1 frase memorizável
 
 ## Renderer
 
 [`tools/glyph-renderer/`](../../../tools/glyph-renderer/)  
 Demos: `demo.json`, `demo-arc.json`, `demo-venn.json`, `demo-economia.json`.
 
-Refs: Alan Hong + Batch Ikigai — communication density, not pixel copy.
+Refs: Alan Hong + Batch — densidade de comunicação, não cópia pixel.

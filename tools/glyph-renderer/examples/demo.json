@@ -2,41 +2,33 @@
   "metadados": {
     "modo": "radial",
     "titulo": "Glifo Sistêmico",
-    "subtitulo": "Circuito: formas apontam o fluxo",
+    "subtitulo": "Circuito: núcleo + spokes + anel",
     "tese_central": "Toda ideia complexa pode ser mapeada como sistema fechado radial.",
     "estilo_visual": "dark_minimalist_cyberpunk",
     "narrativa": {
       "diagnostico": "Listas e pirâmides escondem interações; o leitor vê partes, não o sistema.",
-      "pratica": "Núcleo orquestra. Triângulo aponta outflow. Anel só entre vizinhos.",
-      "sintese": "Forma sem direção é ruído. Fluxo tem verbo e ápice."
+      "pratica": "Núcleo orquestra. Papel semântico nas órbitas. Anel só entre vizinhos.",
+      "sintese": "Forma = papel. Fluxo tem verbo e ápice."
     }
   },
   "zonas": [],
   "nos": [
-    { "id": "tese", "label": "tese", "papel": "core", "categoria": "nucleo", "forma": "circle" },
-    { "id": "nos", "label": "nós", "papel": "orbit", "categoria": "estrutura", "forma": "square" },
+    { "id": "tese", "label": "tese", "papel": "core", "papel_semantico": "estado" },
+    { "id": "nos", "label": "nós", "papel": "orbit", "papel_semantico": "motor" },
     {
       "id": "fluxos",
       "label": "fluxos",
       "papel": "orbit",
-      "categoria": "relacao",
-      "forma": "triangle",
+      "papel_semantico": "fluxo",
       "apontar": "ritmo"
     },
-    {
-      "id": "ritmo",
-      "label": "ritmo",
-      "papel": "orbit",
-      "categoria": "dinamica",
-      "forma": "triangle"
-    },
-    { "id": "canvas", "label": "canvas", "papel": "orbit", "categoria": "geometria", "forma": "square" },
+    { "id": "ritmo", "label": "ritmo", "papel": "orbit", "papel_semantico": "fluxo" },
+    { "id": "canvas", "label": "canvas", "papel": "orbit", "papel_semantico": "motor" },
     {
       "id": "ink",
       "label": "data-ink",
       "papel": "orbit",
-      "categoria": "principio",
-      "forma": "triangle",
+      "papel_semantico": "fluxo",
       "apontar": "nos"
     }
   ],

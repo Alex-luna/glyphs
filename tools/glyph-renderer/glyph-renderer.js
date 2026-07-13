@@ -4,246 +4,246 @@
  */
 (function glyphRenderer() {
   const DEMO_RADIAL = {
-    metadados: {
-      modo: "radial",
-      titulo: "Glifo Sistêmico",
-      subtitulo: "Circuito: núcleo + spokes + anel",
-      tese_central:
-        "Toda ideia complexa pode ser mapeada como sistema fechado radial.",
-      estilo_visual: "dark_minimalist_cyberpunk",
-      narrativa: {
-        diagnostico:
-          "Listas e pirâmides escondem interações; o leitor vê partes, não o sistema.",
-        pratica:
-          "Coloque a tese no centro. Spokes nomeados. Anel só entre vizinhos.",
-        sintese: "Núcleo orquestra. Órbita executa. Fluxo tem verbo.",
-      },
+    "metadados": {
+      "modo": "radial",
+      "titulo": "Glifo Sistêmico",
+      "subtitulo": "Circuito: núcleo + spokes + anel",
+      "tese_central": "Toda ideia complexa pode ser mapeada como sistema fechado radial.",
+      "estilo_visual": "dark_minimalist_cyberpunk",
+      "narrativa": {
+        "diagnostico": "Listas e pirâmides escondem interações; o leitor vê partes, não o sistema.",
+        "pratica": "Núcleo orquestra. Papel semântico nas órbitas. Anel só entre vizinhos.",
+        "sintese": "Forma = papel. Fluxo tem verbo e ápice."
+      }
     },
-    zonas: [],
-    nos: [
+    "zonas": [],
+    "nos": [
       {
-        id: "tese",
-        label: "tese",
-        papel: "core",
-        categoria: "nucleo",
-        forma: "circle",
+        "id": "tese",
+        "label": "tese",
+        "papel": "core",
+        "papel_semantico": "estado"
       },
       {
-        id: "nos",
-        label: "nós",
-        papel: "orbit",
-        categoria: "estrutura",
-        forma: "square",
+        "id": "nos",
+        "label": "nós",
+        "papel": "orbit",
+        "papel_semantico": "motor"
       },
       {
-        id: "fluxos",
-        label: "fluxos",
-        papel: "orbit",
-        categoria: "relacao",
-        forma: "triangle",
+        "id": "fluxos",
+        "label": "fluxos",
+        "papel": "orbit",
+        "papel_semantico": "fluxo",
+        "apontar": "ritmo"
       },
       {
-        id: "ritmo",
-        label: "ritmo",
-        papel: "orbit",
-        categoria: "dinamica",
-        forma: "circle",
+        "id": "ritmo",
+        "label": "ritmo",
+        "papel": "orbit",
+        "papel_semantico": "fluxo"
       },
       {
-        id: "canvas",
-        label: "canvas",
-        papel: "orbit",
-        categoria: "geometria",
-        forma: "square",
+        "id": "canvas",
+        "label": "canvas",
+        "papel": "orbit",
+        "papel_semantico": "motor"
       },
       {
-        id: "ink",
-        label: "data-ink",
-        papel: "orbit",
-        categoria: "principio",
-        forma: "triangle",
-      },
+        "id": "ink",
+        "label": "data-ink",
+        "papel": "orbit",
+        "papel_semantico": "fluxo",
+        "apontar": "nos"
+      }
     ],
-    conexoes: [
+    "conexoes": [
       {
-        de: "tese",
-        para: "nos",
-        relacionamento: "decompõe",
-        label: "decompõe",
-        animacao: "pulso_rapido",
+        "de": "tese",
+        "para": "nos",
+        "relacionamento": "decompõe",
+        "label": "decompõe",
+        "animacao": "pulso_rapido"
       },
       {
-        de: "tese",
-        para: "fluxos",
-        relacionamento: "alimenta",
-        label: "alimenta",
-        animacao: "pulso_rapido",
+        "de": "tese",
+        "para": "fluxos",
+        "relacionamento": "alimenta",
+        "label": "alimenta",
+        "animacao": "pulso_rapido"
       },
       {
-        de: "tese",
-        para: "ritmo",
-        relacionamento: "define",
-        label: "define",
-        animacao: "fluxo_lento",
+        "de": "tese",
+        "para": "ritmo",
+        "relacionamento": "define",
+        "label": "define",
+        "animacao": "fluxo_lento"
       },
       {
-        de: "tese",
-        para: "canvas",
-        relacionamento: "contém",
-        label: "contém",
-        animacao: "fluxo_lento",
+        "de": "tese",
+        "para": "canvas",
+        "relacionamento": "contém",
+        "label": "contém",
+        "animacao": "fluxo_lento"
       },
       {
-        de: "tese",
-        para: "ink",
-        relacionamento: "restringe",
-        label: "corta",
-        animacao: "fluxo_lento",
+        "de": "tese",
+        "para": "ink",
+        "relacionamento": "restringe",
+        "label": "corta",
+        "animacao": "fluxo_lento"
       },
       {
-        de: "nos",
-        para: "fluxos",
-        relacionamento: "alimenta",
-        label: "liga",
-        animacao: "fluxo_lento",
+        "de": "nos",
+        "para": "fluxos",
+        "relacionamento": "alimenta",
+        "label": "liga",
+        "animacao": "fluxo_lento"
       },
       {
-        de: "fluxos",
-        para: "ritmo",
-        relacionamento: "equilibra",
-        label: "equilibra",
-        animacao: "fluxo_lento",
+        "de": "fluxos",
+        "para": "ritmo",
+        "relacionamento": "equilibra",
+        "label": "equilibra",
+        "animacao": "fluxo_lento"
       },
       {
-        de: "ritmo",
-        para: "canvas",
-        relacionamento: "equilibra",
-        label: "equilibra",
-        animacao: "fluxo_lento",
+        "de": "ritmo",
+        "para": "canvas",
+        "relacionamento": "equilibra",
+        "label": "equilibra",
+        "animacao": "fluxo_lento"
       },
       {
-        de: "canvas",
-        para: "ink",
-        relacionamento: "contém",
-        label: "contém",
-        animacao: "fluxo_lento",
+        "de": "canvas",
+        "para": "ink",
+        "relacionamento": "contém",
+        "label": "contém",
+        "animacao": "fluxo_lento"
       },
       {
-        de: "ink",
-        para: "nos",
-        relacionamento: "restringe",
-        label: "corta",
-        animacao: "fluxo_lento",
-      },
-    ],
+        "de": "ink",
+        "para": "nos",
+        "relacionamento": "restringe",
+        "label": "corta",
+        "animacao": "fluxo_lento"
+      }
+    ]
   };
 
   const DEMO_ARC = {
-    metadados: {
-      modo: "arc",
-      titulo: "Arco de Coerência",
-      subtitulo: "Do automático ao soberano",
-      tese_central: "Mudança real desce ao oculto antes de emergir de novo.",
-      estilo_visual: "dark_minimalist_cyberpunk",
-      narrativa: {
-        diagnostico:
-          "Tentar mudar só o visível ignora a ruptura e o trabalho interno.",
-        pratica:
-          "Nomeie a descida, o fundo e a subida. Oculto é zona, não falha.",
-        sintese: "Descer → trabalhar → emergir.",
-      },
+    "metadados": {
+      "modo": "arc",
+      "titulo": "Arco de Coerência",
+      "subtitulo": "Do automático ao soberano — o preço de se tornar",
+      "tese_central": "Mudança real desce ao oculto antes de emergir de novo.",
+      "estilo_visual": "dark_minimalist_cyberpunk",
+      "narrativa": {
+        "diagnostico": "Tentar mudar só o visível (hábito, output) ignora a ruptura e o trabalho interno.",
+        "pratica": "Nomeie a descida, o fundo e a subida. Trate o oculto como zona, não como falha.",
+        "sintese": "Descer → trabalhar → emergir."
+      }
     },
-    zonas: [
-      { id: "visivel", label: "visível" },
-      { id: "oculto", label: "oculto" },
+    "zonas": [
+      {
+        "id": "visivel",
+        "label": "visível"
+      },
+      {
+        "id": "oculto",
+        "label": "oculto"
+      }
     ],
-    nos: [
+    "nos": [
       {
-        id: "herdado",
-        label: "herdado",
-        papel: "inicio",
-        zona: "visivel",
-        ordem: 1,
-        forma: "circle",
+        "id": "herdado",
+        "label": "herdado",
+        "papel": "inicio",
+        "zona": "visivel",
+        "ordem": 1,
+        "papel_semantico": "estado"
       },
       {
-        id: "ruptura",
-        label: "ruptura",
-        papel: "marco",
-        zona: "visivel",
-        ordem: 2,
-        forma: "triangle",
+        "id": "ruptura",
+        "label": "ruptura",
+        "papel": "marco",
+        "zona": "visivel",
+        "ordem": 2,
+        "papel_semantico": "fluxo",
+        "apontar": "dissolucao"
       },
       {
-        id: "dissolucao",
-        label: "dissolução",
-        papel: "marco",
-        zona: "oculto",
-        ordem: 3,
-        forma: "square",
+        "id": "dissolucao",
+        "label": "dissolução",
+        "papel": "marco",
+        "zona": "oculto",
+        "ordem": 3,
+        "papel_semantico": "fluxo",
+        "apontar": "regulacao"
       },
       {
-        id: "regulacao",
-        label: "regulação",
-        papel: "marco",
-        zona: "oculto",
-        ordem: 4,
-        forma: "square",
+        "id": "regulacao",
+        "label": "regulação",
+        "papel": "marco",
+        "zona": "oculto",
+        "ordem": 4,
+        "papel_semantico": "motor"
       },
       {
-        id: "renascimento",
-        label: "renascimento",
-        papel: "marco",
-        zona: "visivel",
-        ordem: 5,
-        forma: "triangle",
+        "id": "renascimento",
+        "label": "renascimento",
+        "papel": "marco",
+        "zona": "visivel",
+        "ordem": 5,
+        "papel_semantico": "fluxo",
+        "apontar": "soberano"
       },
       {
-        id: "soberano",
-        label: "soberano",
-        papel: "fim",
-        zona: "visivel",
-        ordem: 6,
-        forma: "circle",
-      },
+        "id": "soberano",
+        "label": "soberano",
+        "papel": "fim",
+        "zona": "visivel",
+        "ordem": 6,
+        "papel_semantico": "estado"
+      }
     ],
-    conexoes: [
+    "conexoes": [
       {
-        de: "herdado",
-        para: "ruptura",
-        relacionamento: "quebra",
-        label: "quebra",
-        animacao: "pulso_rapido",
+        "de": "herdado",
+        "para": "ruptura",
+        "relacionamento": "quebra",
+        "label": "quebra",
+        "animacao": "pulso_rapido"
       },
       {
-        de: "ruptura",
-        para: "dissolucao",
-        relacionamento: "desce",
-        label: "desce",
-        animacao: "fluxo_lento",
+        "de": "ruptura",
+        "para": "dissolucao",
+        "relacionamento": "desce",
+        "label": "desce",
+        "animacao": "fluxo_lento"
       },
       {
-        de: "dissolucao",
-        para: "regulacao",
-        relacionamento: "trabalha",
-        label: "trabalha",
-        animacao: "fluxo_lento",
+        "de": "dissolucao",
+        "para": "regulacao",
+        "relacionamento": "trabalha",
+        "label": "trabalha",
+        "animacao": "fluxo_lento"
       },
       {
-        de: "regulacao",
-        para: "renascimento",
-        relacionamento: "sobe",
-        label: "sobe",
-        animacao: "pulso_rapido",
+        "de": "regulacao",
+        "para": "renascimento",
+        "relacionamento": "sobe",
+        "label": "sobe",
+        "animacao": "pulso_rapido"
       },
       {
-        de: "renascimento",
-        para: "soberano",
-        relacionamento: "emerge",
-        label: "emerge",
-        animacao: "pulso_rapido",
-      },
-    ],
+        "de": "renascimento",
+        "para": "soberano",
+        "relacionamento": "emerge",
+        "label": "emerge",
+        "animacao": "pulso_rapido"
+      }
+    ]
   };
 
   const DEMO_VENN = {
@@ -721,6 +721,7 @@
           zona: spec.zona || (p.y > ARC.splitY ? "oculto" : "visivel"),
           arcDist: t * arcSamples.totalLen,
           papel_semantico: spec.papel_semantico || null,
+          apontar: spec.apontar || null,
           inferForma: shouldInferForma(spec),
         };
       });
@@ -1021,7 +1022,7 @@
         " " +
         (nd.y + h * 0.7) +
         " Z";
-      const rot = mode === "radial" ? triangleRotateDeg(nd) : 0;
+      const rot = mode === "radial" || mode === "arc" ? triangleRotateDeg(nd) : 0;
       $nodes.appendChild(
         mk("path", {
           d: d,
@@ -1423,7 +1424,22 @@
 
     $edges.appendChild(mk("path", { d: pathD, class: "gr-arc-path" }));
 
-    for (const e of edges) drawEdgeLabel(e);
+    // Lei 3+5: aresta = verbo + direção (não só path guia mudo)
+    for (const e of edges) {
+      const cls = strokeClass(e.relacionamento, e.animKey);
+      const s = insetSpoke(e.a, e.b, 10, 10);
+      $edges.appendChild(
+        mk("line", {
+          x1: s.x1,
+          y1: s.y1,
+          x2: s.x2,
+          y2: s.y2,
+          class: cls,
+          "marker-end": "url(#gr-arrow)",
+        })
+      );
+      drawEdgeLabel(e);
+    }
     for (const nd of nodes) {
       drawNodeShape(nd);
       placeLabel(nd, 16);
@@ -1574,9 +1590,12 @@
       mode +
       " · " +
       (mode === "venn"
-        ? universos.length + " univ"
+        ? universos.length +
+          " univ" +
+          (intersecoes.some((i) => i.papel === "core") ? " · core" : "")
         : nodes.length + " nós") +
-      (mode === "radial" ? radialFormaLegend() : "");
+      (mode === "radial" ? radialFormaLegend() : "") +
+      (mode === "arc" ? " · jornada" : "");
     drawBlueprintFrame(ref);
 
     if (mode === "arc") drawArc(data);
